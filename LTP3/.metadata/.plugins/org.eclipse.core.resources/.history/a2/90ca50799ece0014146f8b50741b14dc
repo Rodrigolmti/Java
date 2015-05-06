@@ -1,0 +1,78 @@
+import utilitarios.Console;
+
+public class Lista1 {
+
+	public static void main(String[] args) {
+		int valor = Console.readInt("---Menu---\n"
+				+ "1-Exercicio\n"
+				+ "2-Exercicio\n"
+				+ "3-Exercicio\n"
+				+ "4=Exercicio\n" 
+				+ "5-Exercicio\n");
+		
+		switch (valor){
+		
+		case 1: 
+			exercicio1();
+			break;
+		case 2:
+			exercicio2();
+			break;
+		case 3:
+			exercicio3();
+			break;
+		case 4:
+			exercicio4();
+			break;
+		case 5:
+			exercicio5();
+			break;
+		default:
+			System.out.println("Opção inválida!");
+		}
+		
+
+	}
+
+	private static void exercicio1() {
+		for (int i=0; i<=9; i++) {
+			System.out.println((int) Math.ceil(Math.random() *10));
+		}
+		
+	}
+
+	private static void exercicio2() {
+		for (int i=1; i<=10; i++) {
+			System.out.println((int) Math.ceil(Math.random() *6));
+		}
+		
+	}
+
+	private static void exercicio3() {
+		for (int i=1; i<=100; i++) {
+			System.out.println((int) Math.ceil(Math.random() *6));
+		}
+		
+	}
+
+	private static void exercicio4() {
+		int n = 0;
+		int limiteInferior = 0; 
+		int limiteSuperior = 0;
+		
+		n = Console.readInt("Informe a quantidade: ");
+		limiteInferior = Console.readInt("Informe o limite inferior: ");
+		limiteSuperior = Console.readInt("Informe o limite superior: ");
+		
+		for(int a = 0; a <= n; a++) {
+			System.out.println(Math.max(limiteInferior , limiteSuperior));
+		}
+		
+	}
+
+	private static void exercicio5() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

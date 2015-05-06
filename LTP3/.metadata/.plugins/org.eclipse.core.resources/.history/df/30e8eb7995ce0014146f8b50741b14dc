@@ -1,0 +1,13 @@
+package lista1;
+import java.util.Random;
+public class Exercicio1 {
+
+	public static void main(String[] args) {
+	Random number = new Random();
+	
+		for (int i=0; i<=9; i++) {
+			System.out.println(number.nextInt(10));
+		}
+	}
+
+}

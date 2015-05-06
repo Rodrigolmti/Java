@@ -1,0 +1,14 @@
+package Lista1;
+import java.util.Random;
+public class Exercico2 {
+
+	public static void main(String[] args) {
+		Random number = new Random();
+		for(int d=0; d<=9; d++) {
+			System.out.println("Dado numero: " + d);
+			System.out.println(number.nextInt(6));
+		}
+
+	}
+
+}

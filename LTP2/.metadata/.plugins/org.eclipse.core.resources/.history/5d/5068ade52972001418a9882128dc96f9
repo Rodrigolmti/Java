@@ -1,0 +1,78 @@
+import java.util.*;
+public class Exercicio7 {
+
+	public static void main(String[] args) {
+		String cpf;
+		int d1;
+		int d2;
+		
+		Scanner leia = new Scanner (System.in);
+		
+			
+				System.out.println("Informe o CPF: ");
+				do {
+					cpf = leia.next();
+						if (cpf.length() < 11) {
+							System.out.println("Cpf informado inv�lido!");
+						}
+						
+						d1 = digito1(cpf);
+						d2 = digito2(cpf);
+						
+						System.out.println("Digitos verificadores: " + d1 + d2);
+						
+						
+				}while (! (cpf.length() < 11));
+ 
+	}
+	
+	public static int digito1 (String cpf) {
+		int c[] = new int[11];
+		int soma = 0;
+		int sequencia = 10;
+		int resto;
+		
+		for (int i = 0; i < 9; i++) {
+			c[i] = Integer.parseInt(cpf.substring(i,i+1));
+			soma = soma + (c[i] * sequencia);
+			sequencia--;
+		}
+		
+		resto = soma / 11;
+		
+		if (resto == 0 || resto == 11) {
+			return 0;
+		} else {
+			return (11 - resto);
+		}	
+	}
+	
+	public static int digito2 (String cpf) {
+		int c[] = new int[11];
+		  int soma = 0, sequencia = 10, resto;
+		 
+		  for (int i=1; i<10; i++){
+		 
+		     c[i] = Integer.parseInt(cpf.substring(i,i+1));
+		 
+		     soma = soma + (c[i] * sequencia);
+		 
+		     sequencia--;
+		 
+		  }
+		 
+		  resto = soma % 11;
+		 
+		  if (resto == 0 || resto == 1){
+		 
+		     return 0;
+		 
+		  }else{
+		 
+		     return (11 - resto);
+		 
+		  }
+		
+	}
+
+}

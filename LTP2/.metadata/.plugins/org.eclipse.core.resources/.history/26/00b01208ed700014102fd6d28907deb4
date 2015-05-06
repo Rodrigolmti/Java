@@ -1,0 +1,21 @@
+import java.util.*;
+public class Exercicio7 {
+
+	public static void main(String[] args) {
+		String cpf;
+		
+		Scanner leia = new Scanner (System.in);
+		
+			do {
+				System.out.println("Informe o CPF: ");
+				cpf = leia.next();
+				
+			}while ();
+
+	}
+	
+	public static String validaCPF (String cpf) {
+		
+	}
+
+}

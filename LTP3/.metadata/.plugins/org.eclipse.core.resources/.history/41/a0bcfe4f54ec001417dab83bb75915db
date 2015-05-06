@@ -1,0 +1,79 @@
+package usuario;
+
+import utilitarios.Console;
+import dados.Cliente;
+
+public class Usuario {
+	public static void main(String args[]) {
+		int opcao = 0;
+		do {
+			System.out.println("--------# Sistema de controle de vendas #--------");
+			System.out.println("-1-Incluir novo cliente");
+			System.out.println("-2-Alterar o cliente via codigo");
+			System.out.println("-3-Excluir um cliente via codigo");
+			System.out.println("-4-Consultar o cliente via cpf");
+			System.out.println("-5-Consultar cliente em ordem alfabetica pelo nome");
+			System.out.println("-6-Incluir um novo produto");
+			System.out.println("-7-Alterar o produto via codigo");
+			System.out.println("-8-Excluir o produto via codigo");
+			System.out.println("-9-Consultar produto em ordem alfabetica pelo nome");
+			System.out.println("-10-Incluir uma venda");
+			System.out.println("-11-Excluir venda");
+			System.out.println("-12-Consultar as vendas pelo periodo em ordem de cliente e data de venda");
+			System.out.println("-13-Consultar estatisticas de venda por cliente");
+			opcao = Console.readInt("Informe a opcao desejada: ");
+			switch (opcao) {
+				case 0:
+					incluirCliente();
+					break;
+				case 1:
+					
+					break;
+				case 2:
+					
+					break;
+				case 3:
+					
+					break;
+				case 4:
+					
+					break;
+				case 5:
+					
+					break;
+				case 6:
+					
+					break;
+				case 7:
+					
+					break;
+				case 8:
+					
+					break;
+				case 9:
+					
+					break;
+				case 10:
+					
+					break;
+				case 11:
+					
+					break;
+				case 12:
+					
+					break;
+				case 13:
+					
+					break;
+				default:
+					System.out.println("Opção inválida!");
+					break;
+			}
+		}while(opcao!=0);
+		
+	}
+	
+	public static void incluirCliente() {
+		cadastro.Cadastro.incluirCliente(null);
+	}
+}

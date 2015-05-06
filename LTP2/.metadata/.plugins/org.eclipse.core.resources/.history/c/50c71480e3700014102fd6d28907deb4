@@ -1,0 +1,68 @@
+import java.util.*;
+public class Exercicio_5 {
+
+	public static void main(String[] args) {
+		float salarioBruto;
+		float salarioLiquido = 0;
+		boolean valida;
+		
+		Scanner leia = new Scanner (System.in);
+		
+		do {
+			valida = false;
+			System.out.println("Informe o salario bruto: ");
+			salarioBruto = leia.nextFloat();
+			valida = true;
+			salarioLiquido = cauculoSalario(salarioBruto);//Metodo cauculo do salario
+			System.out.println(salarioLiquido);
+			
+			
+		}while (! valida);
+		
+
+	}
+	
+	public static float cauculoSalario (float salarioBruto) {//Cauculo INSS
+		
+		float salarioAux;
+		float salarioIr = 0;
+		float salarioInss = 0;
+		float salarioVr;
+		float salarioLiquido;
+		
+		if (salarioBruto <= 1174.86 ) {
+			salarioInss = (8 / 100) * salarioBruto;
+		} else if (salarioBruto >= 1174.87 && salarioBruto <= 1958.10) {
+			salarioInss = (99 / 100) * salarioBruto;
+		} else if (salarioBruto >= 1958.11 && salarioBruto <= 3916.20) {
+			salarioInss = (float) (salarioBruto * 0.11);//275
+		} else if (salarioBruto >= 3916.20) {
+			salarioInss = salarioBruto - (float) 430.78;
+		}
+		
+		if (salarioBruto <= 1637.11) {
+			//nada acontece
+		} else if (salarioBruto >= 1637.12 && salarioBruto <= 2453.50) {
+			salarioIr = (float) (7.5 / 100 * salarioBruto);
+		} else if (salarioBruto >= 2453.51  && salarioBruto <= 3271.38) {
+			salarioIr = (float) (15 / 100 * salarioBruto);//375
+		} else if (salarioBruto >= 3271.39 && salarioBruto <= 4087.65) {
+			salarioIr = (float) (22.5 / 100 * salarioBruto);
+		} else if (salarioBruto >= 4087.66) {
+			salarioIr = (float) (27.5 / 100 * salarioBruto);
+			
+		}
+		
+		if (salarioBruto <= 1.700) {
+			salarioVr = (float) (0.4 / 100 * salarioBruto);
+		} else {
+			salarioVr = salarioBruto - 200;//200
+		}
+		
+		return salarioLiquido = salarioBruto - salarioInss;
+		
+		
+	}
+	
+
+}
