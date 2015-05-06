@@ -1,0 +1,3 @@
+name: PorcosExplosivos
+main: br.com.porcosexplosivos.PorcosExplosivos
+version: {$VersionNumber}
