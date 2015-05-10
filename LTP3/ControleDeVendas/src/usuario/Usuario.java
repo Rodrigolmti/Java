@@ -13,6 +13,7 @@ import utilitarios.LtpUtil;
 import dados.Cliente;
 import dados.Produto;
 import dados.Venda;
+import erros.SisVendasException;
 import cadastro.Cadastro;
 
 /**
@@ -113,7 +114,7 @@ import cadastro.Cadastro;
  */
 
 public class Usuario {
-	public static void main(String args[]) {
+	public static void main(String args[]) throws SisVendasException {
 	
 			if (new File("Vendas.obj").exists() && new File("Clientes.obj").exists() && new File("Produtos.obj").exists()) {
 				lerArqVendas();
@@ -252,9 +253,10 @@ public class Usuario {
 		 * Responsavel por apresentar um menu de opções ao cliente
 		 * @param sem parametro
 		 * @return void
+		 * @throws SisVendasException 
 		 * @exception Apresenta erro caso não a opção seja invalida
 		 */
-		private static void menu() {
+		private static void menu() throws SisVendasException {
 			int opcao = 0;
 			do {
 				System.out.println("--------# Sistema de controle de vendas #--------");
@@ -272,44 +274,27 @@ public class Usuario {
 				System.out.println("-12-Consultar as vendas pelo periodo em ordem de cliente e data de venda");
 				System.out.println("-13-Consultar estatisticas de venda por cliente");
 				opcao = Console.readInt("Informe a opcao desejada: ");
-				int codigo;
+				int codigo = 0;
 				switch (opcao) {
 					case 1:
 						incluirCliente();
 						break;
 					case 2:
-						codigo = Console.readInt("Informe o codigo: ");//Terminar a alteração
-						buscarPorCod(codigo);
+						buscarPorCod();
 						String valida = Console.readLine("VocÃª deseja alterar este cliente? ");
 						System.out.println("Informe SIM OU NÃ‚O");
 							if (valida.equalsIgnoreCase("SIM")) {
-								buscarPorCod(codigo);
+								buscarPorCod();
 								alterarClienteCod(codigo);
 							} else {
 								break;
 							}
 						break;
 					case 3:
-						codigo = Console.readInt("Informe o codigo: ");
-						buscarPorCod(codigo);
-						String valida1 = Console.readLine("VocÃª deseja excluir este cliente? ");
-						System.out.println("Informe SIM OU NÃ‚O");
-							if (valida1.equalsIgnoreCase("SIM")) {
-								buscarPorCod(codigo);
-								excluirCliente(codigo);
-								//Verificar isto
-							} else {
-								break;
-							}
+						excluirCliente();
 						break;
 					case 4:
-						String cpf = Console.readLine("Informe o cpf do cliente");
-						if(!LtpUtil.validarCPF(cpf)) 
-						{
-							System.out.println("CPF invÃ¡lida");
-						} else {
-							buscarPorCpf(cpf);
-						}
+						buscarPorCpf();
 						break;
 					case 5:
 						pesqClienteNome();
@@ -330,16 +315,7 @@ public class Usuario {
 							}
 						break;
 					case 8:
-						codigo = Console.readInt("Informe o codigo: ");//Verificar se tem venda cadastrada
-						Cadastro.pesqProdutoCod(codigo);
-						String valida3 = Console.readLine("VocÃª deseja excluir este produto? ");
-						System.out.println("Informe SIM OU NÃ‚O");
-							if (valida3.equalsIgnoreCase("SIM")) {
-								pesqProdutoCod(codigo);
-								excluirProdutoCod(codigo);
-							} else {
-								break;
-							}
+						excluirProdutoCod();
 						break;
 					case 9:
 						pesqProdutoNome();
@@ -348,15 +324,7 @@ public class Usuario {
 						incluirVenda();
 						break;
 					case 11:
-						codigo = Console.readInt("Informe o codigo: ");//excluir venda
-						Cadastro.pesqProdutoCod(codigo);
-						String valida4 = Console.readLine("VocÃª deseja excluir esta venda? ");
-						System.out.println("Informe SIM OU NÃ‚O");
-							if (valida4.equalsIgnoreCase("SIM")) {
-								excluirVendaCod(codigo);
-							} else {
-								break;
-							}
+						excluirVendaCod();
 						break;
 					case 12:
 						
@@ -376,9 +344,10 @@ public class Usuario {
     * Responsavel por incluir um novo cliente no sistema
 	* @param sem parametro
 	* @return void
+	 * @throws SisVendasException 
 	* @exception Apresenta erro caso seja invalido: nome, cpf, telefone, e-mail e data de entrada
 	*/
-	public static void incluirCliente() {
+	public static void incluirCliente() throws SisVendasException {
 		System.out.println("\n" + "Incluir um novo cliente no banco.");
 		String cpf;
 		while(true) 
@@ -389,7 +358,16 @@ public class Usuario {
 				System.out.println("CPF invÃ¡lida");
 				continue;
 			}
-			Cliente objcliente = cadastro.Cadastro.pesqClienteCpf(cpf);
+			
+			try {
+				Cliente objCliente = Cadastro.pesqClienteCpf(cpf);
+				System.out.println("CPF já está cadastrado para o Sócio" +
+				objCliente.getNome());
+			} catch (SisVendasException erro) {
+				break;
+			}
+			
+			Cliente objcliente = Cadastro.pesqClienteCpf(cpf);
 			if (objcliente!=null) 
 			{
 				System.out.println("JÃ¡ existe cliente para o CPF");
@@ -436,6 +414,7 @@ public class Usuario {
 		}
 		
 		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+		Cadastro.incluirCliente(new Cliente(cpf, nome, telefone, email, dataInclusao, null));
 		clientes.add(new Cliente(cpf, nome, telefone, email, dataInclusao, null));
 		System.out.println("\nCliente cadastradono sistema.");
 	}
@@ -443,9 +422,10 @@ public class Usuario {
 	 * Responsavel por alterar um cliente no sistema
 	 * @param sem parametro
 	 * @return void
+	 * @throws SisVendasException 
 	 * @exception Apresenta erro caso seja invalido: nome, cpf, telefone, e-mail e data de entrada
 	 */
-	private static void alterarClienteCod (int cod) {
+	private static void alterarClienteCod (int cod) throws SisVendasException {
 		System.out.println("\n" + "Alterar um cliente no sistema.");
 		String cpf;
 		while(true) 
@@ -456,12 +436,14 @@ public class Usuario {
 				System.out.println("CPF invÃ¡lida");
 				continue;
 			}
-			Cliente objcliente = cadastro.Cadastro.pesqClienteCpf(cpf);
-			if (objcliente!=null) 
-			{
-				System.out.println("JÃ¡ existe cliente para o CPF");
-				continue;
-			} else break;
+			try {
+				Cliente objCliente = Cadastro.pesqClienteCpf(cpf);
+				System.out.println("CPF já está cadastrado para o Sócio" +
+				objCliente.getNome());
+			} catch (SisVendasException erro) {
+				break;
+			}
+			
 		}
 		String nome;
 		String telefone;
@@ -503,6 +485,7 @@ public class Usuario {
 		}
 		
 		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+		Cadastro.incluirCliente(new Cliente(cpf, nome, telefone, email, dataInclusao, null));
 		clientes.add(new Cliente(cpf, nome, telefone, email, dataInclusao, null));
 		System.out.println("\nCliente cadastradono sistema.");
 	}
@@ -511,17 +494,25 @@ public class Usuario {
 	 * Responsavel por excluir cliente via cod, caso nao haja venda cadastrado ao cliente
 	 * @param int cod
 	 * @return null caso seja invalido
+	 * @throws SisVendasException 
 	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
 	 */
-	private static Cliente excluirCliente(int codigo) {
-		Cliente obj = cadastro.Cadastro.pesqClienteCod(codigo);
-		if (obj != null) { 
-			System.out.println(obj.toString());
-		} else {
-			System.out.println("NÃ£o existe cliente neste codigo");
-		}
+	private static Cliente excluirCliente() throws SisVendasException {
+			int codigo = Console.readInt("Informe o codigo: ");
+			String valida1 = Console.readLine("Voce deseja excluir este cliente? / Informe SIM OU NAO ");
+				if (valida1.equalsIgnoreCase("SIM")) {
+					buscarPorCod();
+					//Verificar isto
+				}
+			Cliente obj = Cadastro.pesqClienteCod(codigo);
+			if (obj != null) { 
+				Cadastro.excluirCliente(obj);
+			} else {
+				System.out.println("NÃ£o existe cliente neste codigo");
+			}
 		return null;
 	}
+	
 	
 	/**
 	 * Responsavel por buscar cliente via cpf
@@ -529,15 +520,21 @@ public class Usuario {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cpf ou nao encontrado no sistema
 	 */
-	private static Cliente buscarPorCpf(String cpf) {
-		Cliente obj = cadastro.Cadastro.pesqClienteCpf(cpf);
-		if (obj != null) { 
-			System.out.println(obj.toString());
-		} else {
-			System.out.println("NÃ£o existe cliente neste codigo");
+	private static void buscarPorCpf() throws SisVendasException {
+		try {
+			String cpf = Console.readLine("Informe o cpf do cliente");
+			if(!LtpUtil.validarCPF(cpf)) 
+			{
+				System.out.println("CPF invÃ¡lida");
+			} else {
+				Cliente objCliente = Cadastro.pesqClienteCpf(cpf);
+				System.out.println(objCliente.toString());
+			}
+		} catch (SisVendasException erro) {
+			System.out.println(erro.getMessage());
 		}
-		return null;
 	}
+
 	
 	/**
 	 * Responsavel por buscar cliente via cod
@@ -545,14 +542,18 @@ public class Usuario {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
 	 */
-	private static Cliente buscarPorCod(int codigo) {
-		Cliente obj = cadastro.Cadastro.pesqClienteCod(codigo);
-		if (obj != null) { 
-			System.out.println(obj.toString());
-		} else {
-			System.out.println("NÃ£o existe cliente neste codigo");
+	private static void  buscarPorCod() throws SisVendasException {
+		try {
+			int codigo = Console.readInt("Informe o codigo: ");
+			Cliente obj = Cadastro.pesqClienteCod(codigo);
+			if (obj != null) { 
+				System.out.println(obj.toString());
+			} else {
+				System.out.println("NÃ£o existe cliente neste codigo");
+			}
+		} catch (SisVendasException erro) {
+			System.out.println(erro.getMessage());
 		}
-		return null;
 	}
 	
 	/**
@@ -610,16 +611,23 @@ public class Usuario {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod
 	 */
-	private static Produto excluirProdutoCod(int codigo) {//Verificar se tem venda cadastrada
-		Produto obj = cadastro.Cadastro.pesqProdutoCod(codigo);
-		if (obj != null) { 
-			System.out.println(obj.toString());
-			cadastro.Cadastro.excluirProduto(obj);
-			System.out.println("O produto foi excluido com sucesso!");
-		} else {
-			System.out.println("NÃ£o existe cliente neste codigo");
-		}
-		return null;
+	private static Produto excluirProdutoCod() {//Verificar se tem venda cadastrada
+		
+		int codigo = Console.readInt("Informe o codigo: ");//Verificar se tem venda cadastrada
+		Cadastro.pesqProdutoCod(codigo);
+		String valida3 = Console.readLine("VocÃª deseja excluir este produto? / Informe SIM OU NAO ");
+			if (valida3.equalsIgnoreCase("SIM")) {
+		
+				Produto obj = cadastro.Cadastro.pesqProdutoCod(codigo);
+				if (obj != null) { 
+					System.out.println(obj.toString());
+					cadastro.Cadastro.excluirProduto(obj);
+					System.out.println("O produto foi excluido com sucesso!");
+				} else {
+					System.out.println("NÃ£o existe cliente neste codigo");
+				}
+			}
+			return null;
 	}
 	
 	/**
@@ -642,9 +650,10 @@ public class Usuario {
 	 * Responsavel por incluir uma venda no sistema
 	 * @param sem parametro
 	 * @return void
+	 * @throws SisVendasException 
 	 * @exception Apresenta erro caso seja invalido: cpf data da venda e quantidade 
 	 */
-	private static void incluirVenda() {
+	private static void incluirVenda() throws SisVendasException {
 		String cpf;
 		while(true) 
 		{
@@ -654,7 +663,7 @@ public class Usuario {
 				System.out.println("CPF invÃ¡lida");
 				continue;
 			}
-			Cliente objcliente = cadastro.Cadastro.pesqClienteCpf(cpf);
+			Cliente objcliente = Cadastro.pesqClienteCpf(cpf);
 			if (!objcliente.equals(cpf)) 
 			{
 				System.out.println("Não existe cliente para o cpf");
@@ -690,56 +699,73 @@ public class Usuario {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod
 	 */
-	private static Venda excluirVendaCod(int codigo) {//Verificar se tem venda cadastrada
-		Venda obj = Cadastro.pesqVendaCod(codigo);
-		if (obj != null) { 
-			System.out.println(obj.toString());
-			cadastro.Cadastro.excluirVenda(obj);
-			System.out.println("A venda foi excluida com sucesso!");
-		} else {
-			System.out.println("NÃ£o existe venda neste codigo");
-		}
-		return null;	}
+	private static Venda excluirVendaCod() {//Verificar se tem venda cadastrada
+		
+		int codigo = Console.readInt("Informe o codigo: ");//excluir venda
+		Cadastro.pesqProdutoCod(codigo);
+		String valida4 = Console.readLine("Voce deseja excluir esta venda? / Informe SIM OU NAO ");
+			if (valida4.equalsIgnoreCase("SIM")) {
+		
+				Venda obj = Cadastro.pesqVendaCod(codigo);
+				if (obj != null) { 
+					System.out.println(obj.toString());
+					cadastro.Cadastro.excluirVenda(obj);
+					System.out.println("A venda foi excluida com sucesso!");
+				} else {
+					System.out.println("Nao existe venda neste codigo");
+				}
+			}
+			return null;
+	}
 	
 	/**
 	 * Responsavel por pesquisar cliente por nome
 	 * @param sem parametro
 	 * @return void
+	 * @throws SisVendasException 
 	 * @exception Apresenta erro caso seja invalido: nome
 	 */
-	private static void pesqClienteNome() {
-		System.out.println("\nPesquisa de Clientes pelo Nome\n");
-		String nome = Console.readLine("Informe o nome ou parte do nome: ");
-		ArrayList<Cliente> resp = Cadastro.pesqClienteNome(nome);
-		if (resp.isEmpty()) {
-			System.out.println("Não existe nehum cliente para o nome.");
-		} else {
-			for (Cliente objSocio : resp ) {
-				System.out.println(objSocio.toString());
-				
+	private static void pesqClienteNome() throws SisVendasException {
+		try {
+			System.out.println("\nPesquisa de Clientes pelo Nome\n");
+			String nome = Console.readLine("Informe o nome ou parte do nome: ");
+			ArrayList<Cliente> resp = Cadastro.pesqClienteNome(nome);
+			if (resp.isEmpty()) {
+				System.out.println("Não existe nehum cliente para o nome.");
+			} else {
+				for (Cliente objSocio : resp ) {
+					System.out.println(objSocio.toString());
+					
+				}
 			}
-		}
 		
+		} catch (SisVendasException erro) {
+			System.out.println(erro.getMessage());
+		}
 	}
 	
 	/**
 	 * Responsavel por pesquisar produto por nome
 	 * @param sem parametro
 	 * @return void
+	 * @throws SisVendasException 
 	 * @exception Apresenta erro caso seja invalido: nome
 	 */
-	private static void pesqProdutoNome() {
-		System.out.println("\nPesquisa de Produto pelo Nome\n");
-		String nome = Console.readLine("Informe o nome ou parte do nome: ");
-		ArrayList<Produto> resp = Cadastro.pesqProdutoNome(nome);
-		if (resp.isEmpty()) {
-			System.out.println("Não existe nehum produto para o nome.");
-		} else {
-			for (Produto objProduto : resp ) {
-				System.out.println(objProduto.toString());
-				
-			}
+	private static void pesqProdutoNome() throws SisVendasException {
+		try {
+			System.out.println("\nPesquisa de Produto pelo Nome\n");
+			String nome = Console.readLine("Informe o nome ou parte do nome: ");
+			ArrayList<Produto> resp = Cadastro.pesqProdutoNome(nome);
+			if (resp.isEmpty()) {
+				System.out.println("Não existe nehum produto para o nome.");
+			} else {
+				for (Produto objProduto : resp ) {
+					System.out.println(objProduto.toString());
+					
+				}
+			}	
+		} catch (SisVendasException erro) {
+			System.out.println(erro.getMessage());
 		}
-		
 	}
 }

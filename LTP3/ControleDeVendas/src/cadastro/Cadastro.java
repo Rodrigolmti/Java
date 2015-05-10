@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collection;
 import java.util.GregorianCalendar;
-
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
-
-import usuario.Apresenta;
 import utilitarios.Console;
 import utilitarios.LtpUtil;
 import dados.Cliente;
 import dados.ItemVenda;
 import dados.Produto;
 import dados.Venda;
+import erros.SisVendasException;
 
 
 /**
@@ -56,17 +54,17 @@ public class Cadastro {
 	 * @exception sem erro
 	 */
 	public static void incluirCliente (Cliente obj) {
-		getListaClientes().add(obj);
+		listaClientes.add(obj);
 	}
-	
+
 	/**
 	 * Responsavel por excluir cliente via cod, caso nao haja venda cadastrado ao cliente
 	 * @param Cliente obj
 	 * @return coid
 	 * @exception Se houver venda cadastrada, n„o sera excluida o cliente
 	 */
-	public void excluirCliente (Cliente obj) {
-		getListaClientes().remove(obj);
+	public static void excluirCliente (Cliente obj) {
+		listaClientes.remove(obj);
 	}
 	
 	/**
@@ -75,13 +73,13 @@ public class Cadastro {
 	 * @return null caso seja invalido
 	 * @exception sem erro
 	 */
-	public static Cliente pesqClienteCod (int codigo) {
-		for (Cliente obj : getListaClientes()) {
+	public static Cliente pesqClienteCod (int codigo) throws SisVendasException {
+		for (Cliente obj : listaClientes) {
 			if (obj.getCodigo() == codigo) {
 				return obj;
 			}
 		}
-		return null;
+		throw new SisVendasException("N„o existe Cliente para o coidgo.");
 	}
 	
 	/**
@@ -90,50 +88,58 @@ public class Cadastro {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cpf
 	 */
-	public static Cliente pesqClienteCpf (String cpf) {
-		for (Cliente obj : getListaClientes()) {
+	public static Cliente pesqClienteCpf (String cpf) throws SisVendasException {
+		for (Cliente obj : listaClientes) {
 			if (obj.getCpf().equals(cpf)) {
 				return obj;
 			}
 		}
-		System.out.println("Cpf n√£o encontrado");
-		return null;
+		throw new SisVendasException("N„o existe Cliente para o cpf.");
 	}
 	
 	/**
 	 * Responsavel por pesquisar cliente via nome
 	 * @param String nome
 	 * @return resposta com a lista de clientes em ordem
-	 * @exception sem erro
+	 * @exception N„o existe cliente para o nome.
 	 */
-	public static ArrayList<Cliente> pesqClienteNome (String nome) {
-		ArrayList<Cliente> resposta = new ArrayList<Cliente>();
-		for (Cliente objCliente : listaClientes) {
-			if (objCliente.getNome().toUpperCase().contains(nome.toUpperCase())) {
-				resposta.add(objCliente);
-			}
-		}
-		// CLASSIFICAR A LISTA RESPOSTA PELO NOME DO SOCIO
-		Collections.sort(resposta, new ClientePorNome());
-		return resposta;
+	public static ArrayList<Cliente> pesqClienteNome (String nome) throws SisVendasException {
+				ArrayList<Cliente> resposta = new ArrayList<Cliente>();
+				for (Cliente objCliente : listaClientes) {
+					if (objCliente.getNome().toUpperCase().contains(nome.toUpperCase())) {
+						resposta.add(objCliente);
+					}
+				}
+				if (resposta.size() > 0) {
+					// CLASSIFICAR A LISTA RESPOSTA PELO NOME DO SOCIO
+					//Collections.sort(resposta, new ClientePorNome());
+					return resposta;
+				}else {
+					throw new SisVendasException("N„o existe Cliente para o nome.");
+				}
 	}
 	
 	/**
 	 * Responsavel por pesquisar o produto via nome 
 	 * @param String nome
 	 * @return resposta com a lista de produtos em ordem
-	 * @exception sem erro
-	 */
-	public static ArrayList<Produto> pesqProdutoNome (String nome) {
-		ArrayList<Produto> resposta = new ArrayList<Produto>();
-		for (Produto objProduto : listaProdutos) {
-			if (objProduto.getNome().toUpperCase().contains(nome.toUpperCase())) {
-				resposta.add(objProduto);
+	 * @exception N„o existe produto para o nome.
+	 */ 
+	public static ArrayList<Produto> pesqProdutoNome (String nome) throws SisVendasException {
+		
+			ArrayList<Produto> resposta = new ArrayList<Produto>();
+			for (Produto objProduto : listaProdutos) {
+				if (objProduto.getNome().toUpperCase().contains(nome.toUpperCase())) {
+					resposta.add(objProduto);
+				}
 			}
-		}
-		// CLASSIFICAR A LISTA RESPOSTA PELO NOME DO SOCIO
-		Collections.sort(resposta, new ProdutoPorNome());
-		return resposta;
+			if (resposta.size() > 0) {
+			// CLASSIFICAR A LISTA RESPOSTA PELO NOME DO SOCIO
+				//Collections.sort(resposta, new ProdutoPorNome());
+				return resposta;
+			} else {
+				throw new SisVendasException("N„o existe produto para o nome.");
+			}
 	}
 	
 	//Lista de produtos
@@ -248,42 +254,6 @@ public class Cadastro {
 		
 	}
 	
-	/**
-	 * Responsavel pelo metodo get do arrayList de clientes
-	 * @param sem parametro
-	 * @return return listaClientes
-	 * @exception sem erro
-	 */
-	public static ArrayList<Cliente> getListaClientes() {
-		return listaClientes;
-	}
-
-	/**
-	 * Responsavel pelo metodo set do arrayList de clientes
-	 * @param ArrayList<Cliente listaClientes>
-	 * @return void
-	 * @exception sem erro 
-	 * 
-	 */
-	public static void setListaClientes(ArrayList<Cliente> listaClientes) {
-		Cadastro.listaClientes = listaClientes;
-	}
-	
-	public static ArrayList<Produto> getListaProdutos() {
-		return listaProdutos;
-	}
-
-	public static void setListaProdutos(ArrayList<Produto> listaProdutos) {
-		Cadastro.listaProdutos = listaProdutos;
-	}
-
-	public static ArrayList<Venda> getListaVendas() {
-		return listaVendas;
-	}
-
-	public static void setListaVendas(ArrayList<Venda> listaVendas) {
-		Cadastro.listaVendas = listaVendas;
-	}
 
 	class ClientePorNome implements Comparator<Cliente> {
 

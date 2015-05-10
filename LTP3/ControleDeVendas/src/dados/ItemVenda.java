@@ -1,5 +1,7 @@
 package dados;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author Rodrigo
@@ -14,7 +16,7 @@ Métodos get e set para obter e modificar cada um dos valores dos atributos.
 Método toString retornando uma String com os atributos da classe formatados
  */
 
-public class ItemVenda {
+public class ItemVenda implements Serializable{
 	
 	private Produto produto;
 	private double precoUnitario;

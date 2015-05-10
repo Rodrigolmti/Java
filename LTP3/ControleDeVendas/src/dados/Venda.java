@@ -1,5 +1,6 @@
 package dados;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import dados.ItemVenda;
@@ -17,7 +18,7 @@ import java.util.GregorianCalendar;
 	M�todos get e set para obter e modificar cada um dos valores dos atributos.
 	M�todo toString retornando uma String com os atributos da classe formatados.
  */
-public class Venda {
+public class Venda implements Serializable{
 		
 	private int numVenda;
 	private static int sequencia = 0;

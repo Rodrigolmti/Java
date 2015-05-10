@@ -1,7 +1,10 @@
 package dados;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+
+import utilitarios.LtpUtil;
 
 /**
  * 
@@ -18,7 +21,7 @@ import java.util.GregorianCalendar;
 	M�todo toString retornando uma String com os atributos da classe formatados
 */
 
-public class Cliente {
+public class Cliente implements Serializable {
 
 	private int codigo;
 	private static int sequencia = 0;
@@ -103,10 +106,14 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente [codigo=" + codigo + ", cpf=" + cpf + ", nome=" + nome
-				+ ", telefone=" + telefone + ", email=" + email
-				+ ", dataInclusao=" + dataInclusao + ", dataAltaracao="
-				+ dataAlteracao + "]";
+		return "\n Cliente: "
+				+ "codigo: " + codigo + "\n" + 
+				"cpf: " + cpf + "\n" +
+				"nome: " + nome + "\n" +
+				"telefone: " + telefone + "\n" +
+				"email: " + email + "\n" +
+				"dataInclusao: " + LtpUtil.formatarData(dataInclusao, "dd/MM/yyyy") + "\n" +
+				"dataAltaracao: " + LtpUtil.formatarData(dataAlteracao, "dd/MM/yyyy") + "\n";
 	}
 	
 }

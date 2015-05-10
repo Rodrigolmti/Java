@@ -1,5 +1,6 @@
 package dados;
 
+import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 import sun.util.calendar.Gregorian;
@@ -18,7 +19,7 @@ M�todo toString retornando uma String com os atributos da classe formatados.
 
  */
 
-public class Produto {
+public class Produto implements Serializable{
 	
 	private int codigo;
 	private static int sequencia = 0;
