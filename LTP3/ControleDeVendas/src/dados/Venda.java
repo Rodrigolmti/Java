@@ -75,14 +75,14 @@ public class Venda implements Serializable{
 		this.vendaItens = vendaItens;
 	}
 	
+	public static void setSeq(int seq) {
+		Venda.sequencia = seq;
+	}
+	
 	@Override
 	public String toString() {
 		return "Venda [numVenda=" + numVenda + ", cliente=" + cliente
 				+ ", dataVenda=" + dataVenda + ", vendaItens=" + vendaItens + "]";
-	}
-
-	public static void setSeq(int seq) {
-		Venda.sequencia = seq;
 	}
 
 }
