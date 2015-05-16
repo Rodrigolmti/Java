@@ -2,9 +2,8 @@ package cadastro;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 import utilitarios.Console;
 import utilitarios.LtpUtil;
 import dados.Cliente;
@@ -20,25 +19,25 @@ import erros.SisVendasException;
  * @version 1.0
  * @since 24/04/2015
  * Esta classe e responsavel por:
- *  Atributos: clientes (lista de Clientes), produtos (lista de Produtos), e lista de vendas (lista de Vendas). As listas devem ser implementadas usando a classe ArrayList. Todas estáticas e com visibilidade publica;
+ *  Atributos: clientes (lista de Clientes), produtos (lista de Produtos), e lista de vendas (lista de Vendas). As listas devem ser implementadas usando a classe ArrayList. Todas estï¿½ticas e com visibilidade publica;
 	Lista de Clientes
-	Método para incluir um novo cliente. Parâmetro o cliente;
-	Método para excluir um cliente da lista de clientes. Parâmetro o cliente.
-	Método para buscar o cliente pelo código. Parâmetro o código. Retornar a mensagem “Não existe cliente para o código” para o caso de não achar o cliente, em um objeto SisVendasException.
-	Método para buscar o cliente pelo cpf. Parâmetro o cpf. Retornar a mensagem “Não existe cliente para o cpf” para o caso de não achar o cliente, em um objeto SisVendasException.
-	Método para obter lista de clientes em ordem alfabética pelo nome ou por parte do nome do cliente. Retornar a mensagem “Não existe nenhum cliente para o nome” para o caso de não achar nenhum cliente, em um objeto SisVendasException.
+	Mï¿½todo para incluir um novo cliente. Parï¿½metro o cliente;
+	Mï¿½todo para excluir um cliente da lista de clientes. Parï¿½metro o cliente.
+	Mï¿½todo para buscar o cliente pelo cï¿½digo. Parï¿½metro o cï¿½digo. Retornar a mensagem ï¿½Nï¿½o existe cliente para o cï¿½digoï¿½ para o caso de nï¿½o achar o cliente, em um objeto SisVendasException.
+	Mï¿½todo para buscar o cliente pelo cpf. Parï¿½metro o cpf. Retornar a mensagem ï¿½Nï¿½o existe cliente para o cpfï¿½ para o caso de nï¿½o achar o cliente, em um objeto SisVendasException.
+	Mï¿½todo para obter lista de clientes em ordem alfabï¿½tica pelo nome ou por parte do nome do cliente. Retornar a mensagem ï¿½Nï¿½o existe nenhum cliente para o nomeï¿½ para o caso de nï¿½o achar nenhum cliente, em um objeto SisVendasException.
 	Lista de Produtos
-	Método para incluir um novo produto. Parâmetro o produto;
-	Método para excluir um produto da lista de produtos. Parâmetro o produto.
-	Método para buscar o produto pelo código. Parâmetro o código. Retornar a mensagem “Não existe produto para o código” para o caso de não achar o produto, em um objeto SisVendasException.
-	Método para obter lista de produtos em ordem alfabética pelo nome ou por parte do nome do produto. Retornar a mensagem “Não existe nenhum produto para o nome” para o caso de não achar nenhum produto, em um objeto SisVendasException.
+	Mï¿½todo para incluir um novo produto. Parï¿½metro o produto;
+	Mï¿½todo para excluir um produto da lista de produtos. Parï¿½metro o produto.
+	Mï¿½todo para buscar o produto pelo cï¿½digo. Parï¿½metro o cï¿½digo. Retornar a mensagem ï¿½Nï¿½o existe produto para o cï¿½digoï¿½ para o caso de nï¿½o achar o produto, em um objeto SisVendasException.
+	Mï¿½todo para obter lista de produtos em ordem alfabï¿½tica pelo nome ou por parte do nome do produto. Retornar a mensagem ï¿½Nï¿½o existe nenhum produto para o nomeï¿½ para o caso de nï¿½o achar nenhum produto, em um objeto SisVendasException.
 	Lista de Vendas
-	Método para incluir uma nova venda. Parâmetro a venda;
-	Método para excluir uma venda da lista de vendas. Parâmetro a venda.
-	Método para buscar a venda pelo código. Parâmetro o código. Retornar a mensagem “Não existe venda para o código” para o caso de não achar a venda, em um objeto SisVendasException.
-	Método para buscar as vendas para o cliente em ordem descendente do código da venda. Parâmetro o cliente. Retornar a mensagem “Não existe nenhuma venda para o cliente” para o caso de não achar nenhuma venda, em um objeto SisVendasException.
-	Método para obter lista de vendas em ordem do nome do cliente e data da venda decrescente. Parâmetro: período das vendas;
-	Método para obter a Estatística de Vendas por cliente em ordem alfabética (Nome do cliente, quantas vezes comprou no período e valor total da compras no período). Parâmetro: período das vendas. Retorno: Lista EstatisticaClientes.
+	Mï¿½todo para incluir uma nova venda. Parï¿½metro a venda;
+	Mï¿½todo para excluir uma venda da lista de vendas. Parï¿½metro a venda.
+	Mï¿½todo para buscar a venda pelo cï¿½digo. Parï¿½metro o cï¿½digo. Retornar a mensagem ï¿½Nï¿½o existe venda para o cï¿½digoï¿½ para o caso de nï¿½o achar a venda, em um objeto SisVendasException.
+	Mï¿½todo para buscar as vendas para o cliente em ordem descendente do cï¿½digo da venda. Parï¿½metro o cliente. Retornar a mensagem ï¿½Nï¿½o existe nenhuma venda para o clienteï¿½ para o caso de nï¿½o achar nenhuma venda, em um objeto SisVendasException.
+	Mï¿½todo para obter lista de vendas em ordem do nome do cliente e data da venda decrescente. Parï¿½metro: perï¿½odo das vendas;
+	Mï¿½todo para obter a Estatï¿½stica de Vendas por cliente em ordem alfabï¿½tica (Nome do cliente, quantas vezes comprou no perï¿½odo e valor total da compras no perï¿½odo). Parï¿½metro: perï¿½odo das vendas. Retorno: Lista EstatisticaClientes.
  */
 
 public class Cadastro {
@@ -61,7 +60,7 @@ public class Cadastro {
 	 * Responsavel por excluir cliente via cod, caso nao haja venda cadastrado ao cliente
 	 * @param Cliente obj
 	 * @return coid
-	 * @exception Se houver venda cadastrada, não sera excluida o cliente
+	 * @exception Se houver venda cadastrada, nï¿½o sera excluida o cliente
 	 */
 	public static void excluirCliente (Cliente obj) {
 		listaClientes.remove(obj);
@@ -79,7 +78,7 @@ public class Cadastro {
 				return obj;
 			}
 		}
-		throw new SisVendasException("Não existe Cliente para o coidgo.");
+		throw new SisVendasException("Nao existe Cliente para o coidgo.");
 	}
 	
 	/**
@@ -94,14 +93,14 @@ public class Cadastro {
 				return obj;
 			}
 		}
-		throw new SisVendasException("Não existe Cliente para o cpf.");
+		throw new SisVendasException("Nao existe Cliente para o cpf.");
 	}
 	
 	/**
 	 * Responsavel por pesquisar cliente via nome
 	 * @param String nome
 	 * @return resposta com a lista de clientes em ordem
-	 * @exception Não existe cliente para o nome.
+	 * @exception Nï¿½o existe cliente para o nome.
 	 */
 	public static ArrayList<Cliente> pesqClienteNome (String nome) throws SisVendasException {
 				ArrayList<Cliente> resposta = new ArrayList<Cliente>();
@@ -112,10 +111,10 @@ public class Cadastro {
 				}
 				if (resposta.size() > 0) {
 					// CLASSIFICAR A LISTA RESPOSTA PELO NOME DO SOCIO
-					//Collections.sort(resposta, new ClientePorNome());
+					Collections.sort(resposta, new ClientePorNome());
 					return resposta;
 				}else {
-					throw new SisVendasException("Não existe Cliente para o nome.");
+					throw new SisVendasException("Nao existe Cliente para o nome.");
 				}
 	}
 	
@@ -123,7 +122,7 @@ public class Cadastro {
 	 * Responsavel por pesquisar o produto via nome 
 	 * @param String nome
 	 * @return resposta com a lista de produtos em ordem
-	 * @exception Não existe produto para o nome.
+	 * @exception Nï¿½o existe produto para o nome.
 	 */ 
 	public static ArrayList<Produto> pesqProdutoNome (String nome) throws SisVendasException {
 		
@@ -135,10 +134,10 @@ public class Cadastro {
 			}
 			if (resposta.size() > 0) {
 			// CLASSIFICAR A LISTA RESPOSTA PELO NOME DO SOCIO
-				//Collections.sort(resposta, new ProdutoPorNome());
+				Collections.sort(resposta, new ProdutoPorNome());
 				return resposta;
 			} else {
-				throw new SisVendasException("Não existe produto para o nome.");
+				throw new SisVendasException("Nao existe produto para o nome.");
 			}
 	}
 	
@@ -169,13 +168,13 @@ public class Cadastro {
 	 * @return null caso seja invalido
 	 * @exception sem erro
 	 */
-	public static Produto pesqProdutoCod (int codigo) {
+	public static Produto pesqProdutoCod (int codigo) throws SisVendasException{
 		for (Produto obj : listaProdutos) {
 			if (obj.getCodigo() == codigo) {
 				return obj;
 			}
 		}
-		return null;
+		throw new SisVendasException("Nao existe produto para o cidgo.");
 	}
 	
 	/**
@@ -250,11 +249,20 @@ public class Cadastro {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
 	 */
-	public static void estatisticaCliente (Cliente cliente) {
+	public static ArrayList<Venda> vendaClientePerido (GregorianCalendar data1, GregorianCalendar data2) {
+		ArrayList<Venda> resposta = new ArrayList<Venda>();
 		
+		for(Venda obj : listaVendas) {
+			if(obj.getDataVenda().compareTo(data1) >= 0 &&
+					obj.getDataVenda().compareTo(data2) <= 0) {
+				resposta.add(obj);
+			}
+		}
+		Collections.sort(resposta, new ordenaVendasCliente());
+		return resposta;
 	}
 	
-
+}
 	class ClientePorNome implements Comparator<Cliente> {
 
 		@Override
@@ -281,5 +289,15 @@ public class Cadastro {
 		}
 		
 	}
-}
+	
+	class ordenaVendasCliente implements Comparator<Venda> {
+		
+		@Override
+		public int compare(Venda obj1, Venda obj2) {
+			int resp = obj1.getCliente().getNome().compareTo(obj2.getCliente().getNome());
+			if(resp != 0) return resp;
+			return obj1.getDataVenda().compareTo(obj2.getDataVenda());
+		}
+	}
+
 

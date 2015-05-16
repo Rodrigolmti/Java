@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="D:/3ºSemestre/LTP3/LtpUtil/LtpUtil.jar"/>
+	<classpathentry kind="lib" path="/media/rodrigo/TRABALHOS/3ºSemestre/LTP3/LtpUtil/LtpUtil.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

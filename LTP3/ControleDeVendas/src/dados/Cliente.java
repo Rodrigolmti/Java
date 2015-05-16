@@ -34,7 +34,6 @@ public class Cliente implements Serializable {
 	
 	public Cliente(String cpf, String nome, String telefone, String email
 			,GregorianCalendar dataInclusao, GregorianCalendar dataAlteracao) {
-		super();
 		codigo = sequencia++;
 		this.cpf = cpf;
 		this.nome = nome;
