@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 
 import sun.util.calendar.Gregorian;
+import utilitarios.LtpUtil;
 
 /**
  * 
@@ -74,9 +75,12 @@ public class Produto implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Produto [codigo=" + codigo + ", nome=" + nome
-				+ ", precoUnitario=" + precoUnitario + ", dataInclusao="
-				+ dataInclusao + ", dataAlteracao=" + dataAlteracao + "]";
+		return "\nProduto: "
+				+ "Codigo: " + codigo + "\n" + 
+				"Nome: " + nome + "\n" +
+				"Preco: " + precoUnitario + "\n" +
+				"telefone: " + LtpUtil.formatarData(dataInclusao, "dd/MM/yyyy") + "\n" +
+				"dataAltaracao: " + LtpUtil.formatarData(dataAlteracao, "dd/MM/yyyy") + "\n";
 	}
 	
 }

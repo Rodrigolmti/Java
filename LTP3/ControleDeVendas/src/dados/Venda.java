@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import dados.ItemVenda;
 
 import java.util.GregorianCalendar;
+
+import utilitarios.LtpUtil;
 /**
  * 
  * @author Rodrigo
@@ -81,8 +83,11 @@ public class Venda implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Venda [numVenda=" + numVenda + ", cliente=" + cliente
-				+ ", dataVenda=" + dataVenda + ", vendaItens=" + vendaItens + "]";
+		return "\nVenda: "
+				+ "codigo: " + numVenda + "\n" + 
+				"Cliente: " + cliente + "\n" +
+				"Data Venda: " + LtpUtil.formatarData(dataVenda, "dd/MM/yyyy") + "\n" + "\n" +
+				"Item da Venda: " + vendaItens + "\n";
 	}
 
 }

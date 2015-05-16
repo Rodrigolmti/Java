@@ -2,6 +2,7 @@ package dados;
 
 import java.io.Serializable;
 
+
 /**
  * 
  * @author Rodrigo
@@ -66,9 +67,11 @@ public class ItemVenda implements Serializable{
 
 	@Override
 	public String toString() {
-		return "ItemVenda [produto=" + produto + ", precoUnitario="
-				+ precoUnitario + ", quantVenda=" + quantVenda
-				+ ", valorVenda=" + valorVenda + "]";
+		return "\nItem da Venda: "
+				+ "Produto: " + produto + "\n" + 
+				"Preco Unitario: " + precoUnitario + "\n" +
+				"Quantidade: " + quantVenda + "\n" +
+				"Valor venda: " + valorVenda + "\n";	
 	}
 	
 }

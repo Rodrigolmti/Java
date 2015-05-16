@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import utilitarios.Console;
 import utilitarios.LtpUtil;
 import dados.Cliente;
+import dados.ItemVenda;
 import dados.Produto;
 import dados.Venda;
 import erros.SisVendasException;
@@ -340,7 +341,7 @@ public class Usuario {
 		while(true) {
 			String data = Console.readLine("Informe a data 1: ");
 			if(!LtpUtil.validarData(data, data1)) {
-				System.out.println("Data invÃ¡lida.");
+				System.out.println("Data invalida.");
 				continue;
 			}
 			if (data1.after(new GregorianCalendar())) {
@@ -360,7 +361,16 @@ public class Usuario {
 			} else break;
 		}
 		
-		Cadastro.vendaClientePerido(data1, data2);
+		
+		ArrayList<Venda> resp = Cadastro.vendaClientePerido(data1, data2);
+		if (resp.isEmpty()) {
+			System.out.println("Nao existe nehuma venda cadastrada neste periodo.");
+		} else {
+			for (Venda objProduto : resp ) {
+				System.out.println(objProduto.toString());
+				
+			}
+		}	
 	}
 
 	/**
@@ -378,7 +388,7 @@ public class Usuario {
 			cpf = Console.readLine("CPF: ");
 			if(!LtpUtil.validarCPF(cpf)) 
 			{
-				System.out.println("CPF invalida");
+				System.out.println("CPF invalido");
 				continue;
 			}
 			
@@ -423,11 +433,15 @@ public class Usuario {
 		while (true) 
 		{
 			email = Console.readLine("E-mail: ");
-			if (email.isEmpty() && !LtpUtil.validarEmail(email)) 
+			if (email.isEmpty()) 
 			{
-				System.out.println("Falta informar o e-mail e ou email invalido!");
+				System.out.println("Falta informar o e-mail!");
 			} else break;
 			
+			if (LtpUtil.validarEmail(email)) 
+			{
+				System.out.println("E-mail invalido!");
+			} else break;
 		}
 		GregorianCalendar dataInclusao = new GregorianCalendar();
 		while(true) {
@@ -543,28 +557,25 @@ public class Usuario {
 	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
 	 */
 	private static Cliente excluirCliente() {
+			
+		try {
 			int codigo = Console.readInt("Informe o codigo: ");
 			String valida1 = Console.readLine("Voce deseja excluir este cliente? / Informe SIM OU NAO ");
-				if (valida1.equalsIgnoreCase("SIM")) {
-					try {
-						buscarPorCod();
-					} catch (SisVendasException erro) {
-						System.out.println(erro.getMessage());
-					}
-					//Verificar se não tem venda cadastrada
-				} else {
-					return null;
+			if (valida1.equalsIgnoreCase("SIM")) {
+				Cliente objcliente = Cadastro.pesqClienteCod(codigo);
+				Cadastro.pesqVendaCliente(objcliente);
+				
+				if (objcliente!=null) {
+					Cadastro.excluirCliente(objcliente);;
 				}
-				try {
-					Cliente objcliente = Cadastro.pesqClienteCod(codigo);
-					if (objcliente!=null) 
-					{
-						Cadastro.excluirCliente(objcliente);;
-					}
-				} catch (SisVendasException erro) {
-					System.out.println(erro.getMessage());
-				}
-		return null;
+						//Verificar se não tem venda cadastrada
+			} else {
+				return null;
+			}
+		} catch (SisVendasException erro) {
+			System.out.println(erro.getMessage());
+		}
+	return null;
 	}
 	
 	
@@ -723,15 +734,24 @@ public class Usuario {
 		String valida3 = Console.readLine("Voce deseja excluir este produto? / Informe SIM OU NAO ");
 			if (valida3.equalsIgnoreCase("SIM")) {
 		
-				//Produto obj = Cadastro.pesqProdutoCod();
-				//if (obj != null) { 
+				try {
+				int codigo = Console.readInt("Informe o codigo do produto");
+				Produto obj;
+					obj = Cadastro.pesqProdutoCod(codigo);
+				
+				if (obj != null) { 
+					System.out.println("Informe o codigo novamente para confirmacao!");
 					pesqProdutoCod();
-					//Cadastro.excluirProduto(obj);
+					Cadastro.excluirProduto(obj);
 					System.out.println("O produto foi excluido com sucesso!");
 				} else {
 					System.out.println("Nao existe cliente neste codigo");
 				}
-			//}
+				
+				} catch (SisVendasException erro) {
+					System.out.println(erro.getMessage());
+				}
+			}
 			return null;
 	}
 	
@@ -765,11 +785,13 @@ public class Usuario {
 	 * @exception Apresenta erro caso seja invalido: cpf data da venda e quantidade 
 	 */
 	private static void incluirVenda() {
+
+		ArrayList<ItemVenda> itemVenda = new ArrayList<ItemVenda>();
 		String cpf;
 		Cliente objcliente;
 		while(true) 
 		{
-			cpf = Console.readLine("CPF: ");
+			cpf = Console.readLine("Informe o CPF do vendedor: ");
 			if(!LtpUtil.validarCPF(cpf)) 
 			{
 				System.out.println("CPF invalido");
@@ -798,36 +820,47 @@ public class Usuario {
 				System.out.println("Data entrada superior a data de hoje");
 			} else break;
 		}
-		while(true) {
-			int quantidade = Console.readInt("Informe a quantidade de vendas: ");
-			if (quantidade <= 0) {
-				System.out.println("A quantidade tem que ser maior que zero!");
-			}else {
-				break;
-			}
-		}
-		ArrayList<Produto> produtos = new ArrayList<Produto>();
+		System.out.println("\nItens da venda!");
+		
+		Produto obj;
+		//Validar isto Já existe o produto em outro item desta venda
 		while(true) {
 			int codigo = Console.readInt("Informe o codigo do produto para o cadastro: ");
-			Produto obj;
 			try {
 					obj = Cadastro.pesqProdutoCod(codigo);
 				if (obj != null) { 
-					pesqProdutoCod();
-					System.out.println("O produto foi excluido com sucesso!");
+					break;
 				} else {
-					System.out.println("Nao existe cliente neste codigo");
+					System.out.println("Nao existe produto neste codigo");
 				}
-				break;
 			
 			} catch (SisVendasException erro) {
 				System.out.println(erro.getMessage());
 			}
 		}
+		int quantidade;
+		double preco = 0;
+		double valor = 0;
+		while(true) {
+			
+			quantidade = Console.readInt("Informe a quantidade de itens vendidos: ");
+			if (quantidade <= 0) {
+				System.out.println("A quantidade tem que ser maior que zero!");
+			}else {
+				preco = Console.readDouble("Informe o preco do produto vendido: ");
+				valor = preco * quantidade;
+				if (preco <= 0) {
+					System.out.println("A quantidade tem que ser maior que zero!");
+				}else {
+					break;
+				}
+				break;
+			}
+		}
 		
-		Cadastro.incluirVenda(new Venda(objcliente, dataInclusao, null));
+		itemVenda.add(new ItemVenda(obj, preco, quantidade, valor));
+		Cadastro.incluirVenda(new Venda(objcliente, dataInclusao, itemVenda));
 		System.out.println("\nProduto cadastrado no sistema.");
-		int valor;//VALOR = QUANTIDADE X VALOR DO PRODUTO;
 	}
 	
 	/**

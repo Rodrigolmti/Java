@@ -174,7 +174,7 @@ public class Cadastro {
 				return obj;
 			}
 		}
-		throw new SisVendasException("Nao existe produto para o cidgo.");
+		throw new SisVendasException("Nao existe produto para o codigo.");
 	}
 	
 	/**
@@ -183,9 +183,6 @@ public class Cadastro {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
 	 */
-	public static void ordemAlfabeticaProduto (String nome) {
-		
-	}
 	//Lista de Vendas
 	/**
 	 * Responsavel por incluir uma venda no sistema
@@ -221,15 +218,19 @@ public class Cadastro {
 		}
 		return null;
 	}
-	
 	/**
 	 * Responsavel por excluir cliente via cod, caso nao haja venda cadastrado ao cliente
 	 * @param int cod
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
 	 */
-	public static void pesqVendaCliente (Cliente cliente) {
-		
+	public static Cliente pesqVendaCliente (Cliente objCliente) throws SisVendasException {
+		for(Venda obj: listaVendas) {
+			if(obj.getCliente() == objCliente) {
+				return objCliente;
+			}
+		}
+		throw new SisVendasException("Impossivel excluir venda, cliente cadastrado nesta venda.");
 	}
 	
 	//Verficar o parametro ...
