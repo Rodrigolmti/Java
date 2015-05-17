@@ -83,7 +83,7 @@ public class Venda implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "\nVenda: "
+		return "\nVenda:\n "
 				+ "codigo: " + numVenda + "\n" + 
 				"Cliente: " + cliente + "\n" +
 				"Data Venda: " + LtpUtil.formatarData(dataVenda, "dd/MM/yyyy") + "\n" + "\n" +

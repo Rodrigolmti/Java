@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.GregorianCalendar;
-import utilitarios.Console;
-import utilitarios.LtpUtil;
+
 import dados.Cliente;
-import dados.ItemVenda;
 import dados.Produto;
 import dados.Venda;
 import erros.SisVendasException;
@@ -177,12 +175,6 @@ public class Cadastro {
 		throw new SisVendasException("Nao existe produto para o codigo.");
 	}
 	
-	/**
-	 * Responsavel por excluir cliente via cod, caso nao haja venda cadastrado ao cliente
-	 * @param int cod
-	 * @return null caso seja invalido
-	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
-	 */
 	//Lista de Vendas
 	/**
 	 * Responsavel por incluir uma venda no sistema
@@ -210,38 +202,24 @@ public class Cadastro {
 	 * @return null caso seja invalido
 	 * @exception sem erro
 	 */
-	public static Venda pesqVendaCod (int codigo) {
+	public static Venda pesqVendaCod (int codigo)throws SisVendasException {
 		for (Venda obj : listaVendas) {
 			if (obj.getNumVenda() == codigo) {
 				return obj;
 			}
 		}
-		return null;
-	}
-	/**
-	 * Responsavel por excluir cliente via cod, caso nao haja venda cadastrado ao cliente
-	 * @param int cod
-	 * @return null caso seja invalido
-	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
-	 */
-	public static Cliente pesqVendaCliente (Cliente objCliente) throws SisVendasException {
-		for(Venda obj: listaVendas) {
-			if(obj.getCliente() == objCliente) {
-				return objCliente;
-			}
-		}
-		throw new SisVendasException("Impossivel excluir venda, cliente cadastrado nesta venda.");
+		throw new SisVendasException("Nao existe produto para o codigo.");
 	}
 	
-	//Verficar o parametro ...
-	/**
-	 * Responsavel por excluir cliente via cod, caso nao haja venda cadastrado ao cliente
-	 * @param int cod
-	 * @return null caso seja invalido
-	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
-	 */
-	public static void pesqVendaClienteData () {
-		
+	public static boolean pesqVendaCliente(Cliente objCli)throws SisVendasException {
+		for (Venda obj : listaVendas) {
+			if (obj.getCliente() == objCli) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		throw new SisVendasException("Impossivel excluir cliente, venda cadastrada!.");
 	}
 	
 	/**

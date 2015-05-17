@@ -354,7 +354,7 @@ public class Usuario {
 		while(true) {
 			String data = Console.readLine("Informe a data 2: ");
 			if(!LtpUtil.validarData(data, data2)) {
-				System.out.println("Data invÃ¡lida.");
+				System.out.println("Data invalida.");
 				continue;
 			}
 			if (data2.after(new GregorianCalendar())) {
@@ -437,7 +437,7 @@ public class Usuario {
 				System.out.println("Falta informar o e-mail!");
 			} else break;
 			
-			if (LtpUtil.validarEmail(email)) 
+			if (!LtpUtil.validarEmail(email)) 
 			{
 				System.out.println("E-mail invalido!");
 			} else break;
@@ -548,11 +548,20 @@ public class Usuario {
 		try {
 			int codigo = Console.readInt("Informe o codigo: ");
 			buscarPorCod(codigo);
+			Cliente obj;
+			Cliente objVenda;
+			
 			String valida1 = Console.readLine("Voce deseja excluir este cliente? / Informe SIM OU NAO ");
 			if (valida1.equalsIgnoreCase("SIM")) {
-				Cadastro.excluirCliente(Cadastro.pesqClienteCod(codigo));
-				System.out.println("Cliente excluido com sucesso");
-						//Verificar se não tem venda cadastrada
+				
+				obj = Cadastro.pesqClienteCod(codigo);
+				objVenda = obj;
+				if(Cadastro.pesqVendaCliente(objVenda)){
+					Cadastro.excluirCliente(obj);
+					System.out.println("Cliente excluido com sucesso");
+				}else {
+					System.out.println("Impossivel excluir cliente, venda cadastrada!.");
+				}
 			} else {
 				return null;
 			}
@@ -700,6 +709,7 @@ public class Usuario {
 	 */
 	private static Produto excluirProdutoCod() {
 		//Verificar se tem venda cadastrada
+		System.out.println("Excluir produto");
 		try {
 			int codigo = Console.readInt("Informe o codigo: ");
 			pesqProdutoCod(codigo);
@@ -729,12 +739,12 @@ public class Usuario {
 	 */
 	private static Produto pesqProdutoCod(int codigo) {
 		try {
-		Cliente obj;
-		obj = Cadastro.pesqClienteCod(codigo);
+		Produto obj;
+		obj = Cadastro.pesqProdutoCod(codigo);
 			if (obj != null) { 
 				System.out.println(obj.toString());
 			} else {
-				System.out.println("Nao existe cliente neste codigo");
+				System.out.println("Nao existe produto neste codigo");
 			}
 		} catch (SisVendasException e) {
 			
@@ -823,6 +833,7 @@ public class Usuario {
 			}
 		}
 		
+		
 		itemVenda.add(new ItemVenda(obj, preco, quantidade, valor));
 		Cadastro.incluirVenda(new Venda(objcliente, dataInclusao, itemVenda));
 		System.out.println("\nProduto cadastrado no sistema.");
@@ -834,29 +845,48 @@ public class Usuario {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod
 	 */
-	private static Venda excluirVendaCod() {//Verificar se tem venda cadastrada
-		
-		int codigo = Console.readInt("Informe o codigo: ");//excluir venda
-		
+	private static Venda excluirVendaCod() {
+		System.out.println("Excluir venda");
 		try {
-			Cadastro.pesqProdutoCod(codigo);
+			int codigo = Console.readInt("Informe o codigo: ");
+			pesqVendaCod(codigo);
+			String valida4 = Console.readLine("Voce deseja excluir esta venda? / Informe SIM OU NAO ");
+				if (valida4.equalsIgnoreCase("SIM")) {
+					Venda obj = Cadastro.pesqVendaCod(codigo);
+					
+					if (obj != null) { 
+						Cadastro.excluirVenda(obj);
+						System.out.println("A venda foi excluida com sucesso!");
+					} else {
+						System.out.println("Nao existe venda neste codigo");
+					}
+				}
 		} catch (SisVendasException erro) {
 			System.out.println(erro.getMessage());
 		}
-		
-		String valida4 = Console.readLine("Voce deseja excluir esta venda? / Informe SIM OU NAO ");
-			if (valida4.equalsIgnoreCase("SIM")) {
-		
-				Venda obj = Cadastro.pesqVendaCod(codigo);
-				if (obj != null) { 
-					System.out.println(obj.toString());
-					cadastro.Cadastro.excluirVenda(obj);
-					System.out.println("A venda foi excluida com sucesso!");
-				} else {
-					System.out.println("Nao existe venda neste codigo");
-				}
+		return null;
+	}
+	
+
+	/**
+	 * Responsavel por pesquisar uma venda por cod no sistema
+	 * @param int cod
+	 * @return null caso seja invalido
+	 * @exception Apresenta erro caso seja invalido: cod
+	 */
+	private static Produto pesqVendaCod(int codigo) {
+		try {
+		Venda obj;
+		obj = Cadastro.pesqVendaCod(codigo);
+			if (obj != null) { 
+				System.out.println(obj.toString());
+			} else {
+				System.out.println("Nao existe venda neste codigo");
 			}
-			return null;
+		} catch (SisVendasException e) {
+			
+			e.printStackTrace();
+		}return null;
 	}
 	
 	/**
