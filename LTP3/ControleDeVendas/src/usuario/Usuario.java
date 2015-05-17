@@ -262,6 +262,7 @@ public class Usuario {
 			int opcao = 0;
 			do {
 				System.out.println("\t\t--------# SISTEMA DE CONTROLE DE VENDAS #--------\n");
+				System.out.println("\n-> - 0 - Para finalizar e gravar os arquivos\n");
 				System.out.println(" ---> CADASTRO DE CLIENTES <---");
 				System.out.println("-> - 1 - Incluir novo cliente");
 				System.out.println("-> - 2 - Alterar o cliente via codigo");
@@ -375,9 +376,7 @@ public class Usuario {
 
 	/**
     * Responsavel por incluir um novo cliente no sistema
-	* @param sem parametro
-	* @return void
-	 * @throws SisVendasException 
+	* @throws SisVendasException 
 	* @exception Apresenta erro caso seja invalido: nome, cpf, telefone, e-mail e data de entrada
 	*/
 	public static void incluirCliente() {
@@ -472,12 +471,10 @@ public class Usuario {
 				int codigo = Console.readInt("Informe o codigo do cliente");
 				Cliente obj = Cadastro.pesqClienteCod(codigo);
 				
-				System.out.println("Informe novamente para confirmação");
-				buscarPorCod();
+				buscarPorCod(codigo);
 				String valida = Console.readLine("Voce deseja alterar este cliente? / Informe SIM OU NAO ");
 				System.out.println("");
 					if (valida.equalsIgnoreCase("SIM")) {	
-			
 						String cpf;
 						while(true) 
 						{
@@ -489,7 +486,7 @@ public class Usuario {
 							}
 							try {
 								Cliente objCliente = Cadastro.pesqClienteCpf(cpf);
-								System.out.println("CPF já está cadastrado para o Sócio" +
+								System.out.println("CPF já está cadastrado para o Sócio " +
 								objCliente.getNome());
 							} catch (SisVendasException erro) {
 								break;
@@ -523,23 +520,14 @@ public class Usuario {
 								System.out.println("Falta informar o e-mail e ou email invalido!");
 							} else break;
 						}
-						GregorianCalendar dataInclusao = new GregorianCalendar();
-						while(true) {
-							String data = Console.readLine("Data de cadastro: ");
-							if(!LtpUtil.validarData(data, dataInclusao)) {
-								System.out.println("Data invÃ¡lida.");
-								continue;
-							}
-							if (dataInclusao.after(new GregorianCalendar())) {
-								System.out.println("Data entrada superior a data de hoje");
-							} else break;
-						}
-						
 						GregorianCalendar dataAlteracao = new GregorianCalendar();
 						
-						Cadastro.excluirCliente(obj);
+						obj.setCpf(cpf);
+						obj.setNome(nome);
+						obj.setTelefone(telefone);
+						obj.setEmail(email);
+						obj.setDataAltaracao(dataAlteracao);
 						
-						Cadastro.incluirCliente(new Cliente(cpf, nome, telefone, email, dataInclusao, dataAlteracao));
 						System.out.println("");
 						System.out.println("\nCliente Alterado no sistema.");
 						
@@ -557,17 +545,13 @@ public class Usuario {
 	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
 	 */
 	private static Cliente excluirCliente() {
-			
 		try {
 			int codigo = Console.readInt("Informe o codigo: ");
+			buscarPorCod(codigo);
 			String valida1 = Console.readLine("Voce deseja excluir este cliente? / Informe SIM OU NAO ");
 			if (valida1.equalsIgnoreCase("SIM")) {
-				Cliente objcliente = Cadastro.pesqClienteCod(codigo);
-				Cadastro.pesqVendaCliente(objcliente);
-				
-				if (objcliente!=null) {
-					Cadastro.excluirCliente(objcliente);;
-				}
+				Cadastro.excluirCliente(Cadastro.pesqClienteCod(codigo));
+				System.out.println("Cliente excluido com sucesso");
 						//Verificar se não tem venda cadastrada
 			} else {
 				return null;
@@ -607,9 +591,8 @@ public class Usuario {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
 	 */
-	private static void  buscarPorCod() throws SisVendasException {
+	private static void  buscarPorCod(int codigo) throws SisVendasException {
 		try {
-			int codigo = Console.readInt("Informe o codigo: ");
 			Cliente obj = Cadastro.pesqClienteCod(codigo);
 			if (obj != null) { 
 				System.out.println(obj.toString());
@@ -673,13 +656,11 @@ public class Usuario {
 		try {
 				int codigo = Console.readInt("Informe o codigo do produto: ");
 				Produto obj = Cadastro.pesqProdutoCod(codigo);
-				System.out.println("Informe novamente o codigo para confirmação!");
-				pesqProdutoCod();
+				pesqProdutoCod(codigo);
 				
 				String valida = Console.readLine("Voce deseja alterar este cliente? / Informe SIM OU NAO ");
 				System.out.println("");
 					if (valida.equalsIgnoreCase("SIM")) {
-				
 						String nome;
 						while(true) {
 							nome = Console.readLine("Informe o nome do produto: ");
@@ -698,22 +679,12 @@ public class Usuario {
 								break;
 							}
 						}
-						GregorianCalendar dataInclusao = new GregorianCalendar();
-						while(true) {
-							String data = Console.readLine("Data de cadastro: ");
-							if(!LtpUtil.validarData(data, dataInclusao)) {
-								System.out.println("Data invalida.");
-								continue;
-							}
-							if (dataInclusao.after(new GregorianCalendar())) {
-								System.out.println("Data entrada superior a data de hoje");
-							} else break;
-						}
-						
 						GregorianCalendar dataAlteracao = new GregorianCalendar();
 						
-						Cadastro.excluirProduto(obj);
-						Cadastro.incluirProduto(new Produto(nome, preco, dataInclusao, dataAlteracao));
+						obj.setNome(nome);
+						obj.setPrecoUnitario(preco);
+						obj.setDataAlteracao(dataAlteracao);
+						
 						System.out.println("\nProduto cadastrado no sistema.");
 					}			
 			}catch (SisVendasException erro) {
@@ -727,32 +698,27 @@ public class Usuario {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod
 	 */
-	private static Produto excluirProdutoCod() {//Verificar se tem venda cadastrada
-		
-	//Verificar se tem venda cadastrada
-		pesqProdutoCod();
-		String valida3 = Console.readLine("Voce deseja excluir este produto? / Informe SIM OU NAO ");
+	private static Produto excluirProdutoCod() {
+		//Verificar se tem venda cadastrada
+		try {
+			int codigo = Console.readInt("Informe o codigo: ");
+			pesqProdutoCod(codigo);
+			String valida3 = Console.readLine("Voce deseja excluir este produto? / Informe SIM OU NAO ");
 			if (valida3.equalsIgnoreCase("SIM")) {
-		
-				try {
-				int codigo = Console.readInt("Informe o codigo do produto");
-				Produto obj;
-					obj = Cadastro.pesqProdutoCod(codigo);
+				Produto obj = Cadastro.pesqProdutoCod(codigo);
 				
 				if (obj != null) { 
-					System.out.println("Informe o codigo novamente para confirmacao!");
-					pesqProdutoCod();
 					Cadastro.excluirProduto(obj);
 					System.out.println("O produto foi excluido com sucesso!");
-				} else {
-					System.out.println("Nao existe cliente neste codigo");
 				}
-				
-				} catch (SisVendasException erro) {
-					System.out.println(erro.getMessage());
-				}
+			} else {
+				System.out.println("Nao existe cliente neste codigo");
 			}
-			return null;
+				
+		} catch (SisVendasException erro) {
+			System.out.println(erro.getMessage());
+		}
+		return null;
 	}
 	
 	/**
@@ -761,9 +727,8 @@ public class Usuario {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod
 	 */
-	private static Produto pesqProdutoCod() {
+	private static Produto pesqProdutoCod(int codigo) {
 		try {
-		int codigo = Console.readInt("Informe o codigo: ");
 		Cliente obj;
 		obj = Cadastro.pesqClienteCod(codigo);
 			if (obj != null) { 
