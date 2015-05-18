@@ -19,19 +19,34 @@ import cadastro.Cadastro;
 
 public class Usuario {
 	public static void main(String[] args) throws SisVendasException {
+		int ultimoValor;
 		if (fileExist()) {
-			lerArq("Venda");
-			int ultimoValor = Cadastro.listaVendas.get(Cadastro.listaVendas.size() - 1)
-					.getNumVenda();
-			Venda.setSeq(ultimoValor);
-			lerArq("Produto");
-			ultimoValor = Cadastro.listaProdutos.get(Cadastro.listaProdutos.size() - 1)
-					.getCodigo();
-			Venda.setSeq(ultimoValor);
-			lerArq("Cliente");
-			ultimoValor = Cadastro.listaClientes.get(Cadastro.listaClientes.size() - 1)
-					.getCodigo();
-			Venda.setSeq(ultimoValor);
+			try {
+				lerArq("Venda");
+				ultimoValor = Cadastro.listaVendas.get(Cadastro.listaVendas.size() - 1)
+						.getNumVenda();
+				Venda.setSeq(ultimoValor);
+			}catch (Exception erro) {
+				System.out.println("Lista de dados 'VENDAS' não foi preenchido!");
+			}
+			
+			try {
+				lerArq("Produto");
+				ultimoValor = Cadastro.listaProdutos.get(Cadastro.listaProdutos.size() - 1)
+						.getCodigo();
+				Venda.setSeq(ultimoValor);
+			}catch (Exception erro) {
+				System.out.println("Lista de dados 'PRODUTO' não foi preenchido!");
+			}
+			
+			try {
+				lerArq("Cliente");
+				ultimoValor = Cadastro.listaClientes.get(Cadastro.listaClientes.size() - 1)
+						.getCodigo();
+				Venda.setSeq(ultimoValor);
+			}catch (Exception erro) {
+			System.out.println("Lista de dados 'Clientes' não foi preenchido!");
+			}
 
 		}
 
@@ -192,7 +207,7 @@ public class Usuario {
 			
 			try {
 				Cliente objCliente = Cadastro.pesqClienteCpf(cpf);
-				System.out.println("CPF ja esta cadastrado para o Socio" +
+				System.out.println("CPF ja esta cadastrado para o Socio " +
 				objCliente.getNome());
 			} catch (SisVendasException erro) {
 				break;
@@ -550,7 +565,6 @@ public class Usuario {
 	 * @exception Apresenta erro caso seja invalido: cod
 	 */
 	private static Produto excluirProdutoCod() {
-		//Verificar se tem venda cadastrada
 		System.out.println("Excluir produto");
 		try {
 			int codigo = Console.readInt("Informe o codigo: ");
@@ -558,13 +572,12 @@ public class Usuario {
 			String valida3 = Console.readLine("Voce deseja excluir este produto? / Informe SIM OU NAO ");
 			if (valida3.equalsIgnoreCase("SIM")) {
 				Produto obj = Cadastro.pesqProdutoCod(codigo);
-				
-				if (obj != null) { 
+				if(Cadastro.pesqProdutoVenda(obj)){
+					System.out.println("Impossivel excluir produto, venda cadastrada!");
+				} else{
 					Cadastro.excluirProduto(obj);
-					System.out.println("O produto foi excluido com sucesso!");
+					System.out.println("O produto foi excluido com sucesso!");	
 				}
-			} else {
-				System.out.println("Nao existe cliente neste codigo");
 			}
 				
 		} catch (SisVendasException erro) {

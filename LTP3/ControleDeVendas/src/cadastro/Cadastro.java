@@ -149,6 +149,14 @@ public class Cadastro {
 				throw new SisVendasException("Nao existe produto para o nome.");
 			}
 	}
+	
+	public static boolean pesqProdutoVenda (Produto objProd) {
+		for(Venda obj : listaVendas) {
+			 obj.getItemVenda().contains(objProd);
+			 return true;
+		}
+		return false;
+	}
 
 	//Inclusão de vendas
 	
@@ -187,15 +195,12 @@ public class Cadastro {
 		throw new SisVendasException("Nao existe produto para o codigo.");
 	}
 	
-	public static boolean pesqVendaCliente(Cliente objCli)throws SisVendasException {
+	public static boolean pesqVendaCliente(Cliente objCli){
 		for (Venda obj : listaVendas) {
-			if (obj.getCliente() == objCli) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-		throw new SisVendasException("Impossivel excluir cliente, venda cadastrada!.");
+			obj.getCliente().equals(objCli);
+			return false;
+		} 
+		return true;
 	}
 	
 	/**
