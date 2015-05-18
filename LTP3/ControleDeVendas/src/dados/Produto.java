@@ -75,7 +75,7 @@ public class Produto implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "\nProduto: "
+		return "\nDados do produto cadastrado no sistema: \n"
 				+ "Codigo: " + codigo + "\n" + 
 				"Nome: " + nome + "\n" +
 				"Preco: " + precoUnitario + "\n" +

@@ -67,7 +67,7 @@ public class ItemVenda implements Serializable{
 
 	@Override
 	public String toString() {
-		return "\nItem da Venda: "
+		return "\nItens cadastrados na venda: \n"
 				+ "Produto: " + produto + "\n" + 
 				"Preco Unitario: " + precoUnitario + "\n" +
 				"Quantidade: " + quantVenda + "\n" +

@@ -54,6 +54,7 @@ public class Usuario {
 		gravarArq("Vendas");
 		gravarArq("Produto");
 		gravarArq("Cliente");
+		System.out.println("Sistema finalizado, arquivos gravados!");
 	}
 
 	private static void lerArq(String obj) {
@@ -351,6 +352,7 @@ public class Usuario {
 	 *             - Quando for encontrada alguma venda cadastrada
 	 */
 	private static Cliente excluirCliente() {
+		System.out.println("\n" + "Excluir um cliente no sistema.");
 		try {
 			int codigo = Console.readInt("Informe o codigo: ");
 			buscarPorCod(codigo);
@@ -476,6 +478,7 @@ public class Usuario {
 	 * 
 	 */
 	private static void incluirProduto() {
+		System.out.println("\n" + "Incluir um novo produto no sistema.");
 		String nome;
 		while(true) {
 			nome = Console.readLine("Informe o nome do produto: ");
@@ -517,7 +520,7 @@ public class Usuario {
 	 *             - Quando não houver venda entre o periodo informado 
 	 */
 	private static void alterarProduto() {
-		System.out.println("Alteração de produto no sistema!");
+		System.out.println("\n" + "Alteração de produto no sistema!");
 		
 		try {
 				int codigo = Console.readInt("Informe o codigo do produto: ");
@@ -565,7 +568,7 @@ public class Usuario {
 	 * @exception Apresenta erro caso seja invalido: cod
 	 */
 	private static Produto excluirProdutoCod() {
-		System.out.println("Excluir produto");
+		System.out.println("\n" + "Excluir um produto no sistema");
 		try {
 			int codigo = Console.readInt("Informe o codigo: ");
 			pesqProdutoCod(codigo);
@@ -617,7 +620,7 @@ public class Usuario {
 	 * @exception Apresenta erro caso seja invalido: cpf data da venda e quantidade 
 	 */
 	private static void incluirVenda() {
-
+		System.out.println("\n" + "Incluir uma venda no sistema.");
 		ArrayList<ItemVenda> itemVenda = new ArrayList<ItemVenda>();
 		String cpf;
 		Cliente objcliente;
@@ -654,44 +657,49 @@ public class Usuario {
 		}
 		System.out.println("\nItens da venda!");
 		
-		Produto obj;
-		//Validar isto Já existe o produto em outro item desta venda
-		while(true) {
-			int codigo = Console.readInt("Informe o codigo do produto para o cadastro: ");
-			try {
-					obj = Cadastro.pesqProdutoCod(codigo);
-				if (obj != null) { 
-					break;
-				} else {
-					System.out.println("Nao existe produto neste codigo");
-				}
-			
-			} catch (SisVendasException erro) {
-				System.out.println(erro.getMessage());
-			}
-		}
-		int quantidade;
+		int quantProd = Console.readInt("Informe quantos produtos tem a venda: ");
+		int quantidade = 0;
+		Produto objProd = null;
 		double preco = 0;
 		double valor = 0;
-		while(true) {
-			
-			quantidade = Console.readInt("Informe a quantidade de itens vendidos: ");
-			if (quantidade <= 0) {
-				System.out.println("A quantidade tem que ser maior que zero!");
-			}else {
-				preco = Console.readDouble("Informe o preco do produto vendido: ");
-				valor = preco * quantidade;
-				if (preco <= 0) {
+		Produto obj = null;
+		for (int a=0;a<quantProd;a++) {
+			while(true) {
+				
+				try {
+					int codigo = Console.readInt("Informe o codigo do produto para o cadastro: ");	
+						obj = Cadastro.pesqProdutoCod(codigo);
+						if (obj != null) { 
+							break;
+						} else {
+							System.out.println("Nao existe produto neste codigo");
+						}
+						
+						if(Cadastro.pesqProdutoVenda(obj)) {//Arrumar o metodo de verificar se ja existe o produto na venda
+							System.out.println("Este produto já esta cadastrado na venda!");
+							break;
+						} 
+				} catch (SisVendasException erro) {//Fazer metodo de estatistica
+					System.out.println(erro.getMessage());
+				}
+			}
+			while(true) {
+				
+				quantidade = Console.readInt("Informe a quantidade de itens vendidos: ");
+				if (quantidade <= 0) {
 					System.out.println("A quantidade tem que ser maior que zero!");
-				}else {
+				}else {//Arrumar o preço do array
+					valor = preco * quantidade;
+					if (preco <= 0) {
+						System.out.println("A quantidade tem que ser maior que zero!");
+					}else {
+						break;
+					}
 					break;
 				}
-				break;
 			}
+			itemVenda.add(new ItemVenda(obj, preco, quantidade, valor));
 		}
-		
-		
-		itemVenda.add(new ItemVenda(obj, preco, quantidade, valor));
 		Cadastro.incluirVenda(new Venda(objcliente, dataInclusao, itemVenda));
 		System.out.println("\nProduto cadastrado no sistema.");
 	}
@@ -703,7 +711,7 @@ public class Usuario {
 	 * @exception Apresenta erro caso seja invalido: cod
 	 */
 	private static Venda excluirVendaCod() {
-		System.out.println("Excluir venda");
+		System.out.println("\n" + "Excluir uma venda no sistema");
 		try {
 			int codigo = Console.readInt("Informe o codigo: ");
 			pesqVendaCod(codigo);

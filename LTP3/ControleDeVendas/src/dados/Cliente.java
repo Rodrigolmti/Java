@@ -105,7 +105,7 @@ public class Cliente implements Serializable {
 
 	@Override
 	public String toString() {
-		return "\nCliente: "
+		return "\nDados do cliente cadastrado no sistema: \n"
 				+ "codigo: " + codigo + "\n" + 
 				"cpf: " + cpf + "\n" +
 				"nome: " + nome + "\n" +

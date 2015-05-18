@@ -226,6 +226,23 @@ public class Cadastro {
 		}
 	}
 	
+	public static ArrayList<Venda> vendaEStatistica (GregorianCalendar data1, GregorianCalendar data2) throws SisVendasException {
+		ArrayList<Venda> resposta = new ArrayList<Venda>();
+		
+		for(Venda obj : listaVendas) {
+			if(obj.getDataVenda().compareTo(data1) >= 0 &&
+					obj.getDataVenda().compareTo(data2) <= 0) {
+				resposta.add(obj);
+			}
+		}
+		if (resposta.size() > 0) {
+			Collections.sort(resposta, new ordenaVendasCliente());
+			return resposta;
+		} else {	
+			throw new SisVendasException("Não foi possivel encontrar vendas neste periodo!");
+		}
+	}
+	
 }
 
 	//Classes afins
