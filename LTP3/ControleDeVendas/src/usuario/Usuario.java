@@ -17,239 +17,83 @@ import dados.Venda;
 import erros.SisVendasException;
 import cadastro.Cadastro;
 
-/**
- * 
- * @author Rodrigo
- * @version 1.0
- * @since 24/04/2015
- * Esta classe e responsavel por:
- *  Classe Usuário: - pacote : usuário – (Métodos estáticos e privativos com exceção do main)
-	Método para apresentar um menu (interface de caracteres). Todos os métodos abaixo, com exceção do main, mais a opção para sair, devem ser chamados no menu. 
-	Método para ler os dados armazenados em arquivo de objetos da lista de clientes, lista de produtos e lista de vendas);
-	Método para gravar os dados em arquivo de objetos  da lista de clientes, lista de produtos e lista de vendas);
-	Clientes
-	Método para incluir um novo cliente. 
-	Validações:
-	Cpf :
-	CPF tem que ser válido
-	Não poderá ser cadastrado cliente com cpf já cadastrado anteriormente.
-	Nome :
-	Nome obrigatório com no mínimo duas palavras
-	Telefone :
-	Telefone obrigatório
-	E-mail :
-	O E-mail tem que ser válido
-	Método para alterar o cliente via código.
-	Validações:
-	Não existe cliente para o código
-	Exibir os dados do cliente e somente alterar o cliente após a confirmação do usuário.
-	Validações:
-	Cpf :
-	CPF tem que ser válido
-	Não poderá ser alterado o cpf se já existe outro cliente com cpf já cadastrado.
-	Nome :
-	Nome obrigatório com no mínimo duas palavras
-	Telefone :
-	Telefone obrigatório
-	E-mail :
-	O E-mail tem que ser válido
-	Método para excluir um cliente via código. 
-	Validações:
-	Não existe cliente para o código
-	O cliente não pode ser excluído se tiver alguma venda registrada para ele.
-	Exibir os dados do cliente e somente excluir o cliente após a confirmação do usuário.
-	Método para consultar o cliente via cpf;
-	Método para consultar clientes em ordem alfabética pelo nome ou por parte do nome do cliente.
-	Produtos
-	Método para incluir um novo produto;
-	Validações:
-	Nome :
-	Nome é obrigatório.
-	Preço unitário
-	O preço é obrigatório e maior que zero
-	Método para alterar o produto via código.
-	Validações:
-	Não existe produto para o código
-	Exibir os dados do produto e somente alterar o produto após a confirmação do usuário.
-	Validações:
-	Nome :
-	Nome é obrigatório.
-	Preço unitário
-	O preço é obrigatório e maior que zero
-	Método para excluir um produto via código;
-	 Validações:
-	Não existe produto para o código.
-	O produto não pode ser excluído se tiver alguma venda registrada para ele.
-	Exibir os dados do produto e somente excluir o produto após a confirmação do usuário.
-	Método para consultar produtos em ordem alfabética pelo nome ou por parte do nome do produto.
-	Vendas
-	Método para incluir uma venda para um cliente;
-	Validações da venda:
-	Cliente :
-	Não existe cliente para o CPF .
-	Data da venda
-	Data tem que ser válida
-	Data da venda não pode ser maior que a data corrente
-	Validações dos itens da venda:
-	A venda tem que ter pelo menos um item
-	Produto
-	Não existe produto para o código
-	Já existe o produto em outro item desta venda
-	Quantidade	
-	A quantidade tem que ser maior que zero
-	Valor
-	Valor = quantidade x preço unitário do produto
-	Método para excluir uma venda de um cliente via código da venda;
-	Validações:
-	Não existe venda para o código.
-	Exibir os dados da venda e somente excluir a venda após a confirmação do usuário.
-	Método para consultar as vendas pelo período  em ordem de cliente e data da venda decrescente. 
-	Validações:
-	Período de venda inválido.
-	Data inicial inválida, Data final inválida, Data inicial superior a Data final
-	Método para consultar a Estatística de Vendas por cliente em ordem alfabética em um período de vendas (Nome, quantas vezes o cliente comprou no período e valor total das compras do cliente no período ) . 
-	Validações:
-	Período de venda inválido.
-	Data inicial inválida, Data final inválida, Data inicial superior a Data final
-
- */
-
 public class Usuario {
-	public static void main(String args[]) throws SisVendasException {
-	
-			if (new File("Vendas.obj").exists() && new File("Clientes.obj").exists() && new File("Produtos.obj").exists()) {
-				
-				int ultCod = Cadastro.listaVendas.get(Cadastro.listaVendas.size()-1).getNumVenda();
-				lerArqVendas();
-				Venda.setSeq(ultCod);
-				int ultCod1 = Cadastro.listaClientes.get(Cadastro.listaClientes.size()-2).getCodigo();
-				lerArqClientes();
-				Cliente.setSeq(ultCod1);
-				int ultCod2 = Cadastro.listaProdutos.get(Cadastro.listaProdutos.size()-3).getCodigo();
-				lerArqProdutos();
-				Produto.setSeq(ultCod2);
-			} 
-				menu();
-				gravarArqVendas();
-				gravarArqCliente();
-				gravarArqProdutos();
-				System.out.println("\nFinalizar...");
-				System.exit(0);
+	public static void main(String[] args) throws SisVendasException {
+		if (fileExist()) {
+			lerArq("Venda");
+			int ultimoValor = Cadastro.listaVendas.get(Cadastro.listaVendas.size() - 1)
+					.getNumVenda();
+			Venda.setSeq(ultimoValor);
+			lerArq("Produto");
+			ultimoValor = Cadastro.listaProdutos.get(Cadastro.listaProdutos.size() - 1)
+					.getCodigo();
+			Venda.setSeq(ultimoValor);
+			lerArq("Cliente");
+			ultimoValor = Cadastro.listaClientes.get(Cadastro.listaClientes.size() - 1)
+					.getCodigo();
+			Venda.setSeq(ultimoValor);
+
 		}
 
-		/**
-		 * Responsavel por gravar o arquivo do objeto cliente no sistema
-		 * @param sem parametro
-		 * @return void
-		 * @exception Apresenta erro caso não consiga gravar o objeto
-		 */
-		private static void gravarArqCliente() {
-			try {
-				ObjectOutputStream out = 
-					new ObjectOutputStream(new FileOutputStream("Clientes.obj"));
-				out.writeObject(Cadastro.listaClientes);
-				out.close();
-			} catch (Exception erro) {
-				System.out.println(erro.getMessage());
-				System.exit(2); // Termino por falha na gravação do arquivo
+		menu();
+		gravarArq("Vendas");
+		gravarArq("Produto");
+		gravarArq("Cliente");
+	}
+
+	private static void lerArq(String obj) {
+		ObjectInputStream inp;
+		try {
+			if (obj.equals("Venda")) {
+				inp = new ObjectInputStream(new FileInputStream("Vendas.obj"));
+				Cadastro.listaVendas = (ArrayList<Venda>) inp.readObject();
+				inp.close();
+			} else if (obj.equals("Produto")) {
+				inp = new ObjectInputStream(new FileInputStream("Produtos.obj"));
+				Cadastro.listaProdutos = (ArrayList<Produto>) inp.readObject();
+
+			} else {
+				inp = new ObjectInputStream(new FileInputStream("Clientes.obj"));
+				Cadastro.listaClientes = (ArrayList<Cliente>) inp.readObject();
+
 			}
-			
+			inp.close();
+
+		} catch (Exception erro) {
+			System.out.println(erro.getMessage());
+			System.exit(1); // termino por falha na leitura do arquivo
 		}
-		
-		/**
-		 * Responsavel por gravar o arquivo do objeto produtos no sistema
-		 * @param sem parametro
-		 * @return void
-		 * @exception Apresenta erro caso não consiga gravar o objeto
-		 */
-		private static void gravarArqProdutos() {
-			try {
-				ObjectOutputStream out = 
-					new ObjectOutputStream(new FileOutputStream("Produtos.obj"));
-				out.writeObject(Cadastro.listaProdutos);
-				out.close();
-			} catch (Exception erro) {
-				System.out.println(erro.getMessage());
-				System.exit(2); // Termino por falha na gravação do arquivo
-			}
-			
-		}
-		
-		/**
-		 * Responsavel por gravar o arquivo do objeto vendas no sistema
-		 * @param sem parametro
-		 * @return void
-		 * @exception Apresenta erro caso não consiga gravar o objeto
-		 */
-		private static void gravarArqVendas() {
-			try {
-				ObjectOutputStream out = 
-					new ObjectOutputStream(new FileOutputStream("Vendas.obj"));
+
+	}
+
+	private static void gravarArq(String obj) {
+		ObjectOutputStream out;
+
+		try {
+			if (obj.equals("Vendas")) {
+				out = new ObjectOutputStream(new FileOutputStream("Vendas.obj"));
 				out.writeObject(Cadastro.listaVendas);
-				out.close();
-			} catch (Exception erro) {
-				System.out.println(erro.getMessage());
-				System.exit(2); // Termino por falha na gravação do arquivo
+
+			} else if (obj.equals("Produto")) {
+				out = new ObjectOutputStream(new FileOutputStream(
+						"Produtos.obj"));
+				out.writeObject(Cadastro.listaProdutos);
+
+			} else {
+
+				out = new ObjectOutputStream(new FileOutputStream(
+						"Clientes.obj"));
+				out.writeObject(Cadastro.listaClientes);
+
 			}
-			
+			out.close();
+		} catch (Exception erro) {
+			System.out.println(erro.getMessage());
+			System.exit(2); // Termino por falha na gravação do arquivo
 		}
 
-		/**
-		 * Responsavel por ler o arquivo do objeto vendas no sistema
-		 * @param sem parametro
-		 * @return void
-		 * @exception Apresenta erro caso não consiga ler o objeto
-		 */
-		private static void lerArqVendas() {
-			try {
-				ObjectInputStream inp = 
-					new ObjectInputStream(new FileInputStream("Vendas.obj"));
-				 Cadastro.listaVendas = (ArrayList<Venda>)inp.readObject();
-				inp.close();
-			} catch (Exception erro) {
-				System.out.println(erro.getMessage());
-				System.exit(1); // termino por falha na leitura do arquivo
-			}
-			
-		}
-		
-		/**
-		 * Responsavel por ler o arquivo do objeto produtos no sistema
-		 * @param sem parametro
-		 * @return void
-		 * @exception Apresenta erro caso não consiga ler o objeto
-		 */
-		private static void lerArqProdutos() {
-			try {
-				ObjectInputStream inp = 
-					new ObjectInputStream(new FileInputStream("Produtos.obj"));
-				 Cadastro.listaProdutos= (ArrayList<Produto>)inp.readObject();
-				inp.close();
-			} catch (Exception erro) {
-				System.out.println(erro.getMessage());
-				System.exit(1); // termino por falha na leitura do arquivo
-			}
-			
-		}
-		
-		/**
-		 * Responsavel por ler o arquivo do objeto cliente no sistema
-		 * @param sem parametro
-		 * @return void
-		 * @exception Apresenta erro caso não consiga ler o objeto
-		 */
-		private static void lerArqClientes() {
-			try {
-				ObjectInputStream inp = 
-					new ObjectInputStream(new FileInputStream("Clientes.obj"));
-				 Cadastro.listaClientes= (ArrayList<Cliente>)inp.readObject();
-				inp.close();
-			} catch (Exception erro) {
-				System.out.println(erro.getMessage());
-				System.exit(1); // termino por falha na leitura do arquivo
-			}
-			
-		}
+	}
+
 		
 		/**
 		 * Responsavel por apresentar um menu de opções ao cliente
@@ -329,56 +173,11 @@ public class Usuario {
 			}while(opcao!=0);
 		}
 		
-	/**
-	* Responsavel por apresentar cliente por periodo de venda
-	* @param sem parametro
-	* @return void
-	* @throws SisVendasException 
-	* @exception Apresenta erro caso seja invalido: data
-	*/
-	private static void vendaClientePerido() {
-		
-		GregorianCalendar data1 = new GregorianCalendar();
-		while(true) {
-			String data = Console.readLine("Informe a data 1: ");
-			if(!LtpUtil.validarData(data, data1)) {
-				System.out.println("Data invalida.");
-				continue;
-			}
-			if (data1.after(new GregorianCalendar())) {
-				System.out.println("Data entrada superior a data de hoje");
-			} else break;
-		}
-		
-		GregorianCalendar data2 = new GregorianCalendar();
-		while(true) {
-			String data = Console.readLine("Informe a data 2: ");
-			if(!LtpUtil.validarData(data, data2)) {
-				System.out.println("Data invalida.");
-				continue;
-			}
-			if (data2.after(new GregorianCalendar())) {
-				System.out.println("Data entrada superior a data de hoje");
-			} else break;
-		}
-		
-		
-		ArrayList<Venda> resp = Cadastro.vendaClientePerido(data1, data2);
-		if (resp.isEmpty()) {
-			System.out.println("Nao existe nehuma venda cadastrada neste periodo.");
-		} else {
-			for (Venda objProduto : resp ) {
-				System.out.println(objProduto.toString());
-				
-			}
-		}	
-	}
+		//Inclusão de cliente
 
-	/**
-    * Responsavel por incluir um novo cliente no sistema
-	* @throws SisVendasException 
-	* @exception Apresenta erro caso seja invalido: nome, cpf, telefone, e-mail e data de entrada
-	*/
+		/**
+		 * Método responsável pelo cadastro de clientes.
+		 */
 	public static void incluirCliente() {
 		System.out.println("\n" + "Incluir um novo cliente no banco.");
 		String cpf;
@@ -413,35 +212,31 @@ public class Usuario {
 		String nome;
 		String telefone;
 		String email;
-		while (true) 
-		{
+		do{
 			nome = Console.readLine("Nome: ").trim();
-			if (nome.isEmpty()) 
+			if (!nome.matches("^(\\D*)+(\\s*)+(\\D)$")) 
 			{
 				System.out.println("Falta informar o nome.");
 			} else break;
-		}
-		while (true) 
-		{
+		}while(!nome.matches("^(\\D*)+(\\s*)+(\\D)$"));
+		
+		while (true) {
 			telefone = Console.readLine("Telefone: ");
 			if (telefone.isEmpty()) 
 			{
 				System.out.println("Falta informar o telefone.");
 			} else break;
 		}
-		while (true) 
-		{
+		do {
 			email = Console.readLine("E-mail: ");
-			if (email.isEmpty()) 
-			{
-				System.out.println("Falta informar o e-mail!");
-			} else break;
 			
 			if (!LtpUtil.validarEmail(email)) 
 			{
 				System.out.println("E-mail invalido!");
 			} else break;
-		}
+			
+		}while(!LtpUtil.validarEmail(email));
+		
 		GregorianCalendar dataInclusao = new GregorianCalendar();
 		while(true) {
 			String data = Console.readLine("Data de cadastro: ");
@@ -458,11 +253,7 @@ public class Usuario {
 		System.out.println("\nCliente cadastrado no sistema.\n");
 	}
 	/**
-	 * Responsavel por alterar um cliente no sistema
-	 * @param sem parametro
-	 * @return void
-	 * @throws SisVendasException 
-	 * @exception Apresenta erro caso seja invalido: nome, cpf, telefone, e-mail e data de entrada
+	 * Método responsável pela alteração de clientes.
 	 */
 	private static void alterarClienteCod() {
 		System.out.println("\n" + "Alterar um cliente no sistema.");
@@ -538,11 +329,11 @@ public class Usuario {
 	}
 	
 	/**
-	 * Responsavel por excluir cliente via cod, caso nao haja venda cadastrado ao cliente
-	 * @param int cod
-	 * @return null caso seja invalido
-	 * @throws SisVendasException 
-	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
+	 * Método responsável pela exclusão de clientes
+	 * 
+	 * @throws SisVendasException
+	 *             - Quando não é possível encontrar o cliente
+	 *             - Quando for encontrada alguma venda cadastrada
 	 */
 	private static Cliente excluirCliente() {
 		try {
@@ -571,12 +362,11 @@ public class Usuario {
 	return null;
 	}
 	
-	
 	/**
-	 * Responsavel por buscar cliente via cpf
-	 * @param String cpf
-	 * @return null caso seja invalido
-	 * @exception Apresenta erro caso seja invalido: cpf ou nao encontrado no sistema
+	 * Método responsável pela busca de clientes pelo CPF
+	 * 
+	 * @throws SisVendasException
+	 *             - Quando não é encontrado cliente pelo CPF informado
 	 */
 	private static void buscarPorCpf() {
 		try {
@@ -595,12 +385,12 @@ public class Usuario {
 
 	
 	/**
-	 * Responsavel por buscar cliente via cod
-	 * @param int Cod
-	 * @return null caso seja invalido
-	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
+	 * Método responsável pela busca de clientes pelo COD
+	 * 
+	 * @throws SisVendasException
+	 *             - Quando não é encontrado cliente pelo COD informado
 	 */
-	private static void  buscarPorCod(int codigo) throws SisVendasException {
+	private static void  buscarPorCod(int codigo) {
 		try {
 			Cliente obj = Cadastro.pesqClienteCod(codigo);
 			if (obj != null) { 
@@ -614,10 +404,61 @@ public class Usuario {
 	}
 	
 	/**
-	 * Responsavel por incluir um novo produto no sistema
-	 * @param sem parametro
-	 * @return void
-	 * @exception Apresenta erro caso seja invalido: nome e preco
+	 * Método responsável pela busca de clientes por periodo de datas
+	 * 
+	 * @throws SisVendasException
+	 *             - Quanda as datas forem invalidas
+	 *             - Quando não houver venda entre o periodo informado 
+	 */
+	private static void vendaClientePerido() {
+		try {
+		
+			GregorianCalendar data1 = new GregorianCalendar();
+			while(true) {
+				String data = Console.readLine("Informe a data 1: ");
+				if(!LtpUtil.validarData(data, data1)) {
+					System.out.println("Data invalida.");
+					continue;
+				}
+				if (data1.after(new GregorianCalendar())) {
+					System.out.println("Data entrada superior a data de hoje");
+				} else break;
+			}
+			
+			GregorianCalendar data2 = new GregorianCalendar();
+			while(true) {
+				String data = Console.readLine("Informe a data 2: ");
+				if(!LtpUtil.validarData(data, data2)) {
+					System.out.println("Data invalida.");
+					continue;
+				}
+				if (data2.after(new GregorianCalendar())) {
+					System.out.println("Data entrada superior a data de hoje");
+				} else break;
+			}
+			
+			
+			ArrayList<Venda> resp = Cadastro.vendaClientePerido(data1, data2);
+			if (resp.isEmpty()) {
+				System.out.println("Nao existe nehuma venda cadastrada neste periodo.");
+			} else {
+				for (Venda objProduto : resp ) {
+					System.out.println(objProduto.toString());
+					
+				}
+			}
+			
+		}catch (SisVendasException erro) {
+			System.out.println(erro.getMessage());
+		}
+	}
+	
+	
+	//Inclusão de produtos!
+	
+	/**
+	 * Método responsável por incluir um novo produto
+	 * 
 	 */
 	private static void incluirProduto() {
 		String nome;
@@ -654,10 +495,11 @@ public class Usuario {
 		System.out.println("\nProduto cadastrado no sistema.");
 	}
 	/**
-	 * Responsavel por alterar o produto
-	 * @param sem parametro
-	 * @return void
-	 * @exception Apresenta erro caso seja invalido: nome e preco
+	 * Método responsável pela busca de clientes por periodo de datas
+	 * 
+	 * @throws SisVendasException
+	 *             - Quanda as datas forem invalidas
+	 *             - Quando não houver venda entre o periodo informado 
 	 */
 	private static void alterarProduto() {
 		System.out.println("Alteração de produto no sistema!");
@@ -751,6 +593,8 @@ public class Usuario {
 			e.printStackTrace();
 		}return null;
 	}
+	
+	//Inclusão Venda
 	
 	/**
 	 * Responsavel por incluir uma venda no sistema
@@ -938,5 +782,31 @@ public class Usuario {
 		} catch (SisVendasException erro) {
 			System.out.println(erro.getMessage());
 		}
+	}
+	
+	//Metodos relacionados a gravar e ler objetos
+	
+	private static boolean fileExist() {
+		if (new File("Vendas.obj").exists()
+				&& new File("Clientes.obj").exists()
+				&& new File("Produtos.obj").exists()) {
+			return true;
+		}
+
+		return false;
+
+	}
+
+	private static void lerArqVendas() {
+		try {
+			ObjectInputStream inp = new ObjectInputStream(new FileInputStream(
+					"Vendas.obj"));
+			Cadastro.listaVendas = (ArrayList<Venda>) inp.readObject();
+			inp.close();
+		} catch (Exception erro) {
+			System.out.println(erro.getMessage());
+			System.exit(1); // termino por falha na leitura do arquivo
+		}
+
 	}
 }

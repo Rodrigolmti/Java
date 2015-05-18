@@ -10,39 +10,13 @@ import dados.Produto;
 import dados.Venda;
 import erros.SisVendasException;
 
-
-/**
- * 
- * @author Rodrigo
- * @version 1.0
- * @since 24/04/2015
- * Esta classe e responsavel por:
- *  Atributos: clientes (lista de Clientes), produtos (lista de Produtos), e lista de vendas (lista de Vendas). As listas devem ser implementadas usando a classe ArrayList. Todas estï¿½ticas e com visibilidade publica;
-	Lista de Clientes
-	Mï¿½todo para incluir um novo cliente. Parï¿½metro o cliente;
-	Mï¿½todo para excluir um cliente da lista de clientes. Parï¿½metro o cliente.
-	Mï¿½todo para buscar o cliente pelo cï¿½digo. Parï¿½metro o cï¿½digo. Retornar a mensagem ï¿½Nï¿½o existe cliente para o cï¿½digoï¿½ para o caso de nï¿½o achar o cliente, em um objeto SisVendasException.
-	Mï¿½todo para buscar o cliente pelo cpf. Parï¿½metro o cpf. Retornar a mensagem ï¿½Nï¿½o existe cliente para o cpfï¿½ para o caso de nï¿½o achar o cliente, em um objeto SisVendasException.
-	Mï¿½todo para obter lista de clientes em ordem alfabï¿½tica pelo nome ou por parte do nome do cliente. Retornar a mensagem ï¿½Nï¿½o existe nenhum cliente para o nomeï¿½ para o caso de nï¿½o achar nenhum cliente, em um objeto SisVendasException.
-	Lista de Produtos
-	Mï¿½todo para incluir um novo produto. Parï¿½metro o produto;
-	Mï¿½todo para excluir um produto da lista de produtos. Parï¿½metro o produto.
-	Mï¿½todo para buscar o produto pelo cï¿½digo. Parï¿½metro o cï¿½digo. Retornar a mensagem ï¿½Nï¿½o existe produto para o cï¿½digoï¿½ para o caso de nï¿½o achar o produto, em um objeto SisVendasException.
-	Mï¿½todo para obter lista de produtos em ordem alfabï¿½tica pelo nome ou por parte do nome do produto. Retornar a mensagem ï¿½Nï¿½o existe nenhum produto para o nomeï¿½ para o caso de nï¿½o achar nenhum produto, em um objeto SisVendasException.
-	Lista de Vendas
-	Mï¿½todo para incluir uma nova venda. Parï¿½metro a venda;
-	Mï¿½todo para excluir uma venda da lista de vendas. Parï¿½metro a venda.
-	Mï¿½todo para buscar a venda pelo cï¿½digo. Parï¿½metro o cï¿½digo. Retornar a mensagem ï¿½Nï¿½o existe venda para o cï¿½digoï¿½ para o caso de nï¿½o achar a venda, em um objeto SisVendasException.
-	Mï¿½todo para buscar as vendas para o cliente em ordem descendente do cï¿½digo da venda. Parï¿½metro o cliente. Retornar a mensagem ï¿½Nï¿½o existe nenhuma venda para o clienteï¿½ para o caso de nï¿½o achar nenhuma venda, em um objeto SisVendasException.
-	Mï¿½todo para obter lista de vendas em ordem do nome do cliente e data da venda decrescente. Parï¿½metro: perï¿½odo das vendas;
-	Mï¿½todo para obter a Estatï¿½stica de Vendas por cliente em ordem alfabï¿½tica (Nome do cliente, quantas vezes comprou no perï¿½odo e valor total da compras no perï¿½odo). Parï¿½metro: perï¿½odo das vendas. Retorno: Lista EstatisticaClientes.
- */
-
 public class Cadastro {
 
 	public static ArrayList<Produto> listaProdutos = new ArrayList<Produto>();
 	public static ArrayList<Cliente> listaClientes = new ArrayList<Cliente>();
 	public static ArrayList<Venda> listaVendas = new ArrayList<Venda>();
+	
+	//Inclusão de cliente
 	
 	/**
 	 * Responsavel por incluir um novo cliente
@@ -116,6 +90,43 @@ public class Cadastro {
 				}
 	}
 	
+	//Inclusão de produto
+		
+	/**
+	 * Responsavel por incluir um novo produto
+	 * @param Produto obj
+	 * @return void
+	 * @exception sem erro
+	 */
+	public static void incluirProduto (Produto obj) {
+		listaProdutos.add(obj);
+	}
+	
+	/**
+	 * Responsavel por excluir um produto 
+	 * @param Produto obj
+	 * @return void
+	 * @exception sem erro
+	 */
+	public static void excluirProduto (Produto obj) {
+		listaProdutos.remove(obj);
+	}
+	
+	/**
+	 * Responsavel por pesquisar um produto por codigo
+	 * @param int codigo
+	 * @return null caso seja invalido
+	 * @exception sem erro
+	 */
+	public static Produto pesqProdutoCod (int codigo) throws SisVendasException{
+		for (Produto obj : listaProdutos) {
+			if (obj.getCodigo() == codigo) {
+				return obj;
+			}
+		}
+		throw new SisVendasException("Nao existe produto para o codigo.");
+	}
+	
 	/**
 	 * Responsavel por pesquisar o produto via nome 
 	 * @param String nome
@@ -138,44 +149,9 @@ public class Cadastro {
 				throw new SisVendasException("Nao existe produto para o nome.");
 			}
 	}
+
+	//Inclusão de vendas
 	
-	//Lista de produtos
-	/**
-	 * Responsavel por incluir um novo produto
-	 * @param Produto obj
-	 * @return void
-	 * @exception sem erro
-	 */
-	public static void incluirProduto (Produto obj) {
-		listaProdutos.add(obj);
-	}
-	
-	/**
-	 * Responsavel por excluir um produto 
-	 * @param Produto obj
-	 * @return void
-	 * @exception sem erro
-	 */
-	public static void excluirProduto (Produto obj) {
-		listaProdutos.remove(obj);//Verificar se tem venda cadastrada
-	}
-	
-	/**
-	 * Responsavel por pesquisar um produto por codigo
-	 * @param int codigo
-	 * @return null caso seja invalido
-	 * @exception sem erro
-	 */
-	public static Produto pesqProdutoCod (int codigo) throws SisVendasException{
-		for (Produto obj : listaProdutos) {
-			if (obj.getCodigo() == codigo) {
-				return obj;
-			}
-		}
-		throw new SisVendasException("Nao existe produto para o codigo.");
-	}
-	
-	//Lista de Vendas
 	/**
 	 * Responsavel por incluir uma venda no sistema
 	 * @param Venda obj
@@ -228,7 +204,7 @@ public class Cadastro {
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
 	 */
-	public static ArrayList<Venda> vendaClientePerido (GregorianCalendar data1, GregorianCalendar data2) {
+	public static ArrayList<Venda> vendaClientePerido (GregorianCalendar data1, GregorianCalendar data2) throws SisVendasException {
 		ArrayList<Venda> resposta = new ArrayList<Venda>();
 		
 		for(Venda obj : listaVendas) {
@@ -237,11 +213,18 @@ public class Cadastro {
 				resposta.add(obj);
 			}
 		}
-		Collections.sort(resposta, new ordenaVendasCliente());
-		return resposta;
+		if (resposta.size() > 0) {
+			Collections.sort(resposta, new ordenaVendasCliente());
+			return resposta;
+		} else {	
+			throw new SisVendasException("Não foi possivel encontrar vendas neste periodo!");
+		}
 	}
 	
 }
+
+	//Classes afins
+
 	class ClientePorNome implements Comparator<Cliente> {
 
 		@Override
