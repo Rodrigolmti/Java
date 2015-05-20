@@ -1,6 +1,7 @@
 package usuario;
 
 import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -17,7 +18,25 @@ import dados.Venda;
 import erros.SisVendasException;
 import cadastro.Cadastro;
 
+/** Classe Usuario.
+*   Classe responsavel pelo cadastro de cliente, venda e produtos.
+*	Trata execoes dos metodos relacionados,
+*	Cadastro de Objetos.
+*	Leitura dos mesmos.
+*	@Rodrigo Lopes Martins
+*/
+
+
 public class Usuario {
+	
+	/**
+	 * Metodo MAIN responsavel por iniciar o menu de opcoes e fazer a gravacao e leitura
+	 * de objetos com parametros ArrayList <clientes>  ArrayList<produtos> e ArrayLuist<vendas>
+	 * Responsavel por metodos intermediarios como buscarPorCpf e demmais metotodos requisitados
+	 * por seus respectivos metodos.
+	 * @author Rodrigo Lopes Martins
+	 */
+	
 	public static void main(String[] args) throws SisVendasException {
 		int ultimoValor;
 		if (fileExist()) {
@@ -56,6 +75,13 @@ public class Usuario {
 		gravarArq("Cliente");
 		System.out.println("Sistema finalizado, arquivos gravados!");
 	}
+	
+	/**
+	 * Responsavel por fazer a leitura de arquivos de objetos
+	 * @param String
+	 * @return Metodo void sem retorno
+	 * @author Rodrigo Lopes Martins
+	 */
 
 	private static void lerArq(String obj) {
 		ObjectInputStream inp;
@@ -82,6 +108,13 @@ public class Usuario {
 
 	}
 
+	/**
+	 * Responsavel por fazer a gravacao de objetos
+	 * @param String
+	 * @return Metodo void sem retorno
+	 * @author Rodrigo Lopes Martins
+	 */
+	
 	private static void gravarArq(String obj) {
 		ObjectOutputStream out;
 
@@ -112,11 +145,10 @@ public class Usuario {
 
 		
 		/**
-		 * Responsavel por apresentar um menu de opções ao cliente
-		 * @param sem parametro
-		 * @return void
-		 * @throws SisVendasException 
-		 * @exception Apresenta erro caso não a opção seja invalida
+		 * Responsavel por apresentar um menu de opções ao cliente das quais: Inclusao, alteracao, exclusao e pesquisa.
+		 * @param 
+		 * @return Metodo void sem retorno
+		 * @author Rodrigo Lopes Martins
 		 */
 		private static void menu()  {
 			int opcao = 0;
@@ -180,7 +212,7 @@ public class Usuario {
 						vendaClientePerido();
 						break;
 					case 13:
-						
+						estatisticaVenda();
 						break;
 					default:
 						System.out.println("Opcao invalida!");
@@ -193,6 +225,10 @@ public class Usuario {
 
 		/**
 		 * Método responsável pelo cadastro de clientes.
+		 * Faz a inclusao do obj cliente no ArrayList da classe cadastro
+		 * Cpf,nome,email,telefone e data de inclusao sao os dados requiridos
+		 * @throws SisVendasException
+		 * @author Rodrigo Lopes Martins
 		 */
 	public static void incluirCliente() {
 		System.out.println("\n" + "Incluir um novo cliente no banco.");
@@ -270,6 +306,11 @@ public class Usuario {
 	}
 	/**
 	 * Método responsável pela alteração de clientes.
+	 * Faz a alteracao do obj cliente que esta localizado na classe cadastro com o metodo .set
+	 * Campos obrigatorios cpf,nome,telefone,email
+	 * Apos fazer a alteracao o sistema seta uma data (dataAlteracao) atravez do gregorianCalendar
+	 * @throws SisVendasException
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static void alterarClienteCod() {
 		System.out.println("\n" + "Alterar um cliente no sistema.");
@@ -346,10 +387,10 @@ public class Usuario {
 	
 	/**
 	 * Método responsável pela exclusão de clientes
-	 * 
+	 * A classe verifica se tem venda cadastrada para o cliente informado, caso nao haja exclusao sera efetuada
+	 * A verificacao e feita apartir de metodos na classe cadastro que buscam dentro do ArrayList venda o cliente informado
 	 * @throws SisVendasException
-	 *             - Quando não é possível encontrar o cliente
-	 *             - Quando for encontrada alguma venda cadastrada
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static Cliente excluirCliente() {
 		System.out.println("\n" + "Excluir um cliente no sistema.");
@@ -381,9 +422,10 @@ public class Usuario {
 	
 	/**
 	 * Método responsável pela busca de clientes pelo CPF
-	 * 
+	 * O metodo faz o uso de metodos da classe cadastro para varrer o ArraListy de cliente e verificar o cpf informado
+	 * Caso nao seja encontrado o cpf informado o metodo retorna o obj como toString apresentado os dados do cliente na tela
 	 * @throws SisVendasException
-	 *             - Quando não é encontrado cliente pelo CPF informado
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static void buscarPorCpf() {
 		try {
@@ -403,9 +445,10 @@ public class Usuario {
 	
 	/**
 	 * Método responsável pela busca de clientes pelo COD
-	 * 
+	 * O metodo utiliza outro metodo da classe cadastro que varre o ArrayListy de clientes e verifica se ja tem cadastrado o COD
+	 * Caso nao tenha ele retona um obj do clinte como toString e informa os dados do clinete na tela
 	 * @throws SisVendasException
-	 *             - Quando não é encontrado cliente pelo COD informado
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static void  buscarPorCod(int codigo) {
 		try {
@@ -422,14 +465,12 @@ public class Usuario {
 	
 	/**
 	 * Método responsável pela busca de clientes por periodo de datas
-	 * 
+	 * O metodo utiliza outro metodo da classe cadastro que varre o ArrayList de cliente e verifica por data os clientes cadastrados
+	 * Se caso tenha clientes neste periodo ele retorno os cliente em ordem alfabetica para o cliente na tela
 	 * @throws SisVendasException
-	 *             - Quanda as datas forem invalidas
-	 *             - Quando não houver venda entre o periodo informado 
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static void vendaClientePerido() {
-		try {
-		
 			GregorianCalendar data1 = new GregorianCalendar();
 			while(true) {
 				String data = Console.readLine("Informe a data 1: ");
@@ -464,10 +505,6 @@ public class Usuario {
 					
 				}
 			}
-			
-		}catch (SisVendasException erro) {
-			System.out.println(erro.getMessage());
-		}
 	}
 	
 	
@@ -475,7 +512,9 @@ public class Usuario {
 	
 	/**
 	 * Método responsável por incluir um novo produto
-	 * 
+	 * O metodo faz a inclusao de produtos no ArrayList produtos na classe cadastro
+	 * Campos obrigatorios para inclusao nome do produto preco e data de cadastro
+	 * @author Rodtrigo Lopes Martins
 	 */
 	private static void incluirProduto() {
 		System.out.println("\n" + "Incluir um novo produto no sistema.");
@@ -513,11 +552,10 @@ public class Usuario {
 		System.out.println("\nProduto cadastrado no sistema.");
 	}
 	/**
-	 * Método responsável pela busca de clientes por periodo de datas
-	 * 
-	 * @throws SisVendasException
-	 *             - Quanda as datas forem invalidas
-	 *             - Quando não houver venda entre o periodo informado 
+	 * Método responsável pela alteracao do produto informado no ArrayList produtos na classe cadastro
+	 * campos obrigatorios jnome preco. O metodo utiliza o .set para setar os novos valores no Array
+	 * @throws SisVendasException 
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static void alterarProduto() {
 		System.out.println("\n" + "Alteração de produto no sistema!");
@@ -563,9 +601,8 @@ public class Usuario {
 	
 	/**
 	 * Responsavel por excluir um produto no sistema
-	 * @param int cod
-	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static Produto excluirProdutoCod() {
 		System.out.println("\n" + "Excluir um produto no sistema");
@@ -591,9 +628,8 @@ public class Usuario {
 	
 	/**
 	 * Responsavel por pesquisar um produto por cod no sistema
-	 * @param int cod
-	 * @return null caso seja invalido
-	 * @exception Apresenta erro caso seja invalido: cod
+	 * @throws SisVendasException
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static Produto pesqProdutoCod(int codigo) {
 		try {
@@ -614,10 +650,8 @@ public class Usuario {
 	
 	/**
 	 * Responsavel por incluir uma venda no sistema
-	 * @param sem parametro
-	 * @return void
 	 * @throws SisVendasException 
-	 * @exception Apresenta erro caso seja invalido: cpf data da venda e quantidade 
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static void incluirVenda() {
 		System.out.println("\n" + "Incluir uma venda no sistema.");
@@ -659,7 +693,6 @@ public class Usuario {
 		
 		int quantProd = Console.readInt("Informe quantos produtos tem a venda: ");
 		int quantidade = 0;
-		Produto objProd = null;
 		double preco = 0;
 		double valor = 0;
 		Produto obj = null;
@@ -669,16 +702,15 @@ public class Usuario {
 				try {
 					int codigo = Console.readInt("Informe o codigo do produto para o cadastro: ");	
 						obj = Cadastro.pesqProdutoCod(codigo);
-						if (obj != null) { 
-							break;
-						} else {
-							System.out.println("Nao existe produto neste codigo");
-						}
-						
-						if(Cadastro.pesqProdutoVenda(obj)) {//Arrumar o metodo de verificar se ja existe o produto na venda
-							System.out.println("Este produto já esta cadastrado na venda!");
-							break;
-						} 
+						//if(Cadastro.pesqItemVenda(obj)) {//Arrumar o metodo de verificar se ja existe o produto na venda
+							//System.out.println("Este produto já esta cadastrado na venda!");
+						//}else {
+							if (obj != null) { 
+								break;
+							} //else {
+								//System.out.println("Nao existe produto neste codigo");
+							//}
+						//}
 				} catch (SisVendasException erro) {//Fazer metodo de estatistica
 					System.out.println(erro.getMessage());
 				}
@@ -690,7 +722,7 @@ public class Usuario {
 					System.out.println("A quantidade tem que ser maior que zero!");
 				}else {//Arrumar o preço do array
 					valor = preco * quantidade;
-					if (preco <= 0) {
+					if (preco > 0) {
 						System.out.println("A quantidade tem que ser maior que zero!");
 					}else {
 						break;
@@ -706,9 +738,8 @@ public class Usuario {
 	
 	/**
 	 * Responsavel por excluir uma venda por cod
-	 * @param int codigo
-	 * @return null caso seja invalido
-	 * @exception Apresenta erro caso seja invalido: cod
+	 * @throws SisVendasException
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static Venda excluirVendaCod() {
 		System.out.println("\n" + "Excluir uma venda no sistema");
@@ -735,9 +766,8 @@ public class Usuario {
 
 	/**
 	 * Responsavel por pesquisar uma venda por cod no sistema
-	 * @param int cod
-	 * @return null caso seja invalido
-	 * @exception Apresenta erro caso seja invalido: cod
+	 * @throws SisVendasException
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static Produto pesqVendaCod(int codigo) {
 		try {
@@ -756,16 +786,14 @@ public class Usuario {
 	
 	/**
 	 * Responsavel por pesquisar cliente por nome
-	 * @param sem parametro
-	 * @return void
-	 * @throws SisVendasException 
-	 * @exception Apresenta erro caso seja invalido: nome
+	 * @throws SisVendasException
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static void pesqClienteNome() {
 		try {
 			System.out.println("\nPesquisa de Clientes pelo Nome");
 			String nome = Console.readLine("Informe o nome ou parte do nome: ");
-			ArrayList<Cliente> resp = Cadastro.pesqClienteNome(nome);
+			ArrayList<Cliente> resp = Cadastro.pesqClienteNomeOrdem(nome);
 			if (resp.isEmpty()) {
 				System.out.println("Nao existe nehum cliente para o nome.");
 			} else {
@@ -782,10 +810,8 @@ public class Usuario {
 	
 	/**
 	 * Responsavel por pesquisar produto por nome
-	 * @param sem parametro
-	 * @return void
 	 * @throws SisVendasException 
-	 * @exception Apresenta erro caso seja invalido: nome
+	 * @author Rodrigo Lopes Martins
 	 */
 	private static void pesqProdutoNome() {
 		try {
@@ -805,8 +831,79 @@ public class Usuario {
 		}
 	}
 	
+	private static void estatisticaVenda() {//Não completo
+		//Trabalho do inferno tnc
+		String data;
+		GregorianCalendar data1 = new GregorianCalendar();
+		GregorianCalendar data2 = new GregorianCalendar();
+		Cliente obj = null;
+		int vendas = 1;
+		double total = 0;
+		String nome;
+		
+		while(true) {
+			try{
+				do {
+					nome = Console.readLine("Informe o nome do cliente");
+				}while(!nome.matches("^(\\D*)+(\\S*)+(\\D)$"));
+			obj = Cadastro.buscarClienteNome(nome);
+				if(obj == null) {
+					System.out.println("Nao existe cliente para este nome!");
+					continue;
+				} else {
+					break;
+				}
+			} catch(SisVendasException erro) {
+				System.out.println(erro.getMessage());
+			}
+		}
+		
+		do {
+			data = Console.readLine("Informe a data 1: ");
+			if(!LtpUtil.validarData(data, data1)) {
+				System.out.println("Data invalida!");
+			}
+			
+			if(data1.after(new GregorianCalendar())) {
+				System.out.println("Data maior que a data atual!");
+			}
+		} while((data.matches("^(\\d{2}\\/\\d{2}\\/\\d{4})$")) && (data1.after(new GregorianCalendar())));
+		
+		do {
+			data = Console.readLine("Informe a data 1: ");
+			if(!LtpUtil.validarData(data, data2)) {
+				System.out.println("Data invalida!");
+			}
+			
+			if(data2.after(new GregorianCalendar())) {
+				System.out.println("Data maior que a data atual!");
+			}
+		} while((data.matches("^(\\d{2}\\/\\d{2}\\/\\d{4})$")) && (data2.after(new GregorianCalendar())));
+		
+		ArrayList<Venda> resposta = Cadastro.vendaClientePerido(data1, data2);
+		ArrayList<ItemVenda> resposta1 = new ArrayList<ItemVenda>();
+		
+		for(Venda objVenda : resposta) {
+			if(objVenda.getCliente().getNome().equalsIgnoreCase(nome)){
+				resposta1 = objVenda.getItemVenda();
+				for(ItemVenda objItem : resposta1) {
+					total += objItem.getValorVenda();
+					vendas = vendas++;
+				}
+			}
+		}
+		
+		System.out.println("Estatistica de cliente: " + nome);
+		System.out.println("Numero de produtos comprados: " + vendas);
+		System.out.println("Valor total de compras: " + total);
+	}
+	
 	//Metodos relacionados a gravar e ler objetos
 	
+	/**
+	 * Responsavel verificar a existencia dos arquivos de objetos
+	 * @author Rodrigo Lopes Martins
+	 */
 	private static boolean fileExist() {
 		if (new File("Vendas.obj").exists()
 				&& new File("Clientes.obj").exists()
@@ -818,6 +915,10 @@ public class Usuario {
 
 	}
 
+	/**
+	 * Responsavel por ler os arquivos de objetos no sistema
+	 * @author Rodrigo Lopes Martins
+	 */
 	private static void lerArqVendas() {
 		try {
 			ObjectInputStream inp = new ObjectInputStream(new FileInputStream(

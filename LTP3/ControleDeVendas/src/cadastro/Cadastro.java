@@ -69,12 +69,28 @@ public class Cadastro {
 	}
 	
 	/**
+	 * Responsavel por pesquisar cliente por nome e retornar o obj se encontrar
+	 * @param String nome
+	 * @return Objeto cliente
+	 * @exception Apresenta erro caso seja invalido: cpf
+	 */
+	public static Cliente buscarClienteNome(String nome) throws SisVendasException{
+	
+		for(Cliente obj : listaClientes) {
+			if(obj.getNome().toUpperCase().contains(nome.toUpperCase())) {
+				return obj;
+			}
+		}
+		throw new SisVendasException("Nao existe Cliente para o nome.");
+	}
+	
+	/**
 	 * Responsavel por pesquisar cliente via nome
 	 * @param String nome
 	 * @return resposta com a lista de clientes em ordem
 	 * @exception Nï¿½o existe cliente para o nome.
 	 */
-	public static ArrayList<Cliente> pesqClienteNome (String nome) throws SisVendasException {
+	public static ArrayList<Cliente> pesqClienteNomeOrdem (String nome) throws SisVendasException {
 				ArrayList<Cliente> resposta = new ArrayList<Cliente>();
 				for (Cliente objCliente : listaClientes) {
 					if (objCliente.getNome().toUpperCase().contains(nome.toUpperCase())) {
@@ -150,6 +166,11 @@ public class Cadastro {
 			}
 	}
 	
+	/**
+	 * Responsavel por pesquisar o produto no ArrayList venda
+	 * @param Produto produto
+	 * @return true ou false
+	 */ 
 	public static boolean pesqProdutoVenda (Produto objProd) {
 		for(Venda obj : listaVendas) {
 			 obj.getItemVenda().contains(objProd);
@@ -195,6 +216,11 @@ public class Cadastro {
 		throw new SisVendasException("Nao existe produto para o codigo.");
 	}
 	
+	/**
+	 * Responsavel por pesquisar o cliente no ArrayList venda
+	 * @param Cliente cliente
+	 * @return false ou true
+	 */ 
 	public static boolean pesqVendaCliente(Cliente objCli){
 		for (Venda obj : listaVendas) {
 			obj.getCliente().equals(objCli);
@@ -203,13 +229,21 @@ public class Cadastro {
 		return true;
 	}
 	
+	public static boolean pesqItemVenda(Produto objProd){
+		for (Venda obj : listaVendas) {
+			obj.getItemVenda().contains(objProd);
+			return true;
+		} 
+		return false;
+	}
+	
 	/**
 	 * Responsavel por excluir cliente via cod, caso nao haja venda cadastrado ao cliente
 	 * @param int cod
 	 * @return null caso seja invalido
 	 * @exception Apresenta erro caso seja invalido: cod ou nao encontrado no sistema
 	 */
-	public static ArrayList<Venda> vendaClientePerido (GregorianCalendar data1, GregorianCalendar data2) throws SisVendasException {
+	public static ArrayList<Venda> vendaClientePerido (GregorianCalendar data1, GregorianCalendar data2)  {
 		ArrayList<Venda> resposta = new ArrayList<Venda>();
 		
 		for(Venda obj : listaVendas) {
@@ -218,29 +252,10 @@ public class Cadastro {
 				resposta.add(obj);
 			}
 		}
-		if (resposta.size() > 0) {
-			Collections.sort(resposta, new ordenaVendasCliente());
-			return resposta;
-		} else {	
-			throw new SisVendasException("Não foi possivel encontrar vendas neste periodo!");
-		}
-	}
-	
-	public static ArrayList<Venda> vendaEStatistica (GregorianCalendar data1, GregorianCalendar data2) throws SisVendasException {
-		ArrayList<Venda> resposta = new ArrayList<Venda>();
 		
-		for(Venda obj : listaVendas) {
-			if(obj.getDataVenda().compareTo(data1) >= 0 &&
-					obj.getDataVenda().compareTo(data2) <= 0) {
-				resposta.add(obj);
-			}
-		}
-		if (resposta.size() > 0) {
 			Collections.sort(resposta, new ordenaVendasCliente());
 			return resposta;
-		} else {	
-			throw new SisVendasException("Não foi possivel encontrar vendas neste periodo!");
-		}
+		
 	}
 	
 }
