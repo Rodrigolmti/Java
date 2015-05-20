@@ -721,12 +721,9 @@ public class Usuario {
 				if (quantidade <= 0) {
 					System.out.println("A quantidade tem que ser maior que zero!");
 				}else {//Arrumar o preço do array
+					
+					preco = obj.getPrecoUnitario();
 					valor = preco * quantidade;
-					if (preco > 0) {
-						System.out.println("A quantidade tem que ser maior que zero!");
-					}else {
-						break;
-					}
 					break;
 				}
 			}
@@ -831,8 +828,7 @@ public class Usuario {
 		}
 	}
 	
-	private static void estatisticaVenda() {//Não completo
-		//Trabalho do inferno tnc
+	private static void estatisticaVenda() {
 		String data;
 		GregorianCalendar data1 = new GregorianCalendar();
 		GregorianCalendar data2 = new GregorianCalendar();
