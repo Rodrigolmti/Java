@@ -175,9 +175,22 @@ public class Janela extends javax.swing.JFrame {
 
         if(valid == true) {
             //Conversoes para validacoes de + e -
-            int data1 = Integer.parseInt(lbl_data1.getText());
-            int data2 = Integer.parseInt(lbl_data2.getText());
-
+            String data1 = String.valueOf(lbl_data1.getText());
+            String dia1 = data1.substring(0,2);
+            int diaAux1 = Integer.parseInt(dia1);
+            String mes1 = data1.substring(3,5);
+            int mesAux1 = Integer.parseInt(mes1);
+            String ano1 = data1.substring(6,10);
+            int anoAux1 = Integer.parseInt(ano1);
+            
+            String data2 = String.valueOf(lbl_data2.getText());
+            String dia2 = data2.substring(0,2);
+            int diaAux2 = Integer.parseInt(dia2);
+            String mes2 = data2.substring(3,5);
+            int mesAux2 = Integer.parseInt(mes2);
+            String ano2 = data2.substring(6,10);
+            int anoAux2 = Integer.parseInt(ano2);
+            
             String valor1 = String.valueOf(lbl_valor1.getText());
             String valor2 = String.valueOf(lbl_valor2.getText());
             
@@ -188,14 +201,6 @@ public class Janela extends javax.swing.JFrame {
             
             double auxValor1 = Double.parseDouble(valor1);
             double auxValor2 = Double.parseDouble(valor2);
-            
-            if(data1 < 0 && data2 < 0) {
-                lbl_mgmErroData.setVisible(true);
-            }
-
-            if(auxValor1 < 0 && auxValor2 < 0) {
-                lbl_mgsErroValor.setVisible(true);
-            }
             
             if(a.equals("-") && b.equals("-")) {//Acerta os valores caso a e b serem negativos
                 auxValor2 = auxValor2 + auxValor1;
@@ -211,7 +216,8 @@ public class Janela extends javax.swing.JFrame {
                 }
             }
 
-            Grafico grafico = new Grafico(data1,data2,auxValor1,auxValor2);
+            Grafico grafico = new Grafico(diaAux1,mesAux1,anoAux1,
+                    diaAux2,mesAux2,anoAux2, auxValor1,auxValor2);
         }
     }//GEN-LAST:event_btn_gerarActionPerformed
 
