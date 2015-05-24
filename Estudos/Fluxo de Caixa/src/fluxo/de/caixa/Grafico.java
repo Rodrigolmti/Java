@@ -13,7 +13,9 @@ import org.jfree.ui.ApplicationFrame;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo lopes martins (lmti)
+ * Esta classe e responsavel por criar o grafico com os parametros
+ * requeridos pelo construtor Grafico da classe
  */
 public class Grafico {
     

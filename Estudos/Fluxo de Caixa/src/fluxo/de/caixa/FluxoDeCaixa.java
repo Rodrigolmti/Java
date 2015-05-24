@@ -7,7 +7,10 @@ package fluxo.de.caixa;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo lopes martins (lmti)
+ * @version 1.0
+ * @since 23/05/2015
+ * Responsavel por iniciar a aplicacao.
  */
 public class FluxoDeCaixa {
 
