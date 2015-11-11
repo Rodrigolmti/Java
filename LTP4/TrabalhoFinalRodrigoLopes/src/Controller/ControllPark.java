@@ -5,22 +5,18 @@
  */
 package Controller;
 
-import static database.ParkingSQL.cosultParkCnpj;
 import static database.ParkingSQL.deletePark;
 import static database.ParkingSQL.insertPark;
-import static database.ParkingSQL.parkReturnObject;
-import static database.ParkingSQL.searchAllParkings;
-import static database.ParkingSQL.searchPark;
+import static database.ParkingSQL.parkReturnWithCodeObject;
+import static database.ParkingSQL.returnAllParkings;
+import static database.ParkingSQL.searchWithCnpjPark;
+import static database.ParkingSQL.searchWithCodePark;
 import static database.ParkingSQL.updatePark;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import model.Parking;
 
-/**
- *
- * @author rodrigo.martins
- */
 public class ControllPark {
     
     /**
@@ -64,9 +60,9 @@ public class ControllPark {
      * Retorna todos os estacionamentos cadastrados no banco
      * @return ResultSet result
      */
-    public static ResultSet searchAllParkingCtr() {
+    public static ResultSet returnAllParkingsCtr() {
         try {
-            ResultSet result = searchAllParkings();
+            ResultSet result = returnAllParkings();
             return result;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
@@ -79,9 +75,9 @@ public class ControllPark {
      * @param cnpj
      * @return boolean
      */
-    public static boolean consultCnpjCtr(String cnpj) {
+    public static boolean searchWithCnpjParkCtr(String cnpj) {
         try {   
-            return cosultParkCnpj(cnpj);
+            return searchWithCnpjPark(cnpj);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
@@ -93,9 +89,9 @@ public class ControllPark {
      * @param code
      * @return ResultSet result
      */
-    public static ResultSet searchParkCodeCtr(int code) {
+    public static ResultSet searchWithCodeParkCtr(int code) {
         try {
-            ResultSet result = searchPark(code);
+            ResultSet result = searchWithCodePark(code);
             return result;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
@@ -108,9 +104,9 @@ public class ControllPark {
      * @param code
      * @return Parking obj
      */
-    public static Parking parkReturnObjectCtr(int code) {
+    public static Parking parkReturnWithCodeObjectCtr(int code) {
         try {
-            Parking park = parkReturnObject(code);
+            Parking park = parkReturnWithCodeObject(code);
             return park;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);

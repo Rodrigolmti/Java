@@ -101,21 +101,10 @@ public class ParkingSQL {
      * @return ResultSet result
      * @throws SQLException 
      */
-    public static ResultSet searchPark(int code) throws SQLException {
+    public static ResultSet searchWithCodePark(int code) throws SQLException {
         PreparedStatement objSQL
                 = objCon.prepareStatement(search);
         objSQL.setInt(1, code);
-        return objSQL.executeQuery();
-    }
-
-    /**
-     * Pesquisa todos os estacionamentos no banco de dados
-     * @return ResultSet result
-     * @throws SQLException 
-     */
-    public static ResultSet searchAllParkings() throws SQLException {
-        PreparedStatement objSQL
-                = objCon.prepareStatement(allParkings);
         return objSQL.executeQuery();
     }
 
@@ -125,7 +114,7 @@ public class ParkingSQL {
      * @return ResultSet result
      * @throws SQLException 
      */
-    public static boolean cosultParkCnpj(String cnpj) throws SQLException {
+    public static boolean searchWithCnpjPark(String cnpj) throws SQLException {
 
         PreparedStatement objSQL = objCon.prepareStatement(consultCnpj);
         objSQL.setString(1, cnpj);
@@ -134,12 +123,23 @@ public class ParkingSQL {
     }
 
     /**
+     * Pesquisa todos os estacionamentos no banco de dados
+     * @return ResultSet result
+     * @throws SQLException 
+     */
+    public static ResultSet returnAllParkings() throws SQLException {
+        PreparedStatement objSQL
+                = objCon.prepareStatement(allParkings);
+        return objSQL.executeQuery();
+    }
+    
+    /**
      * Retorna um objeto de estacionamento com o codigo informado
      * @param codigo
      * @return Parking obj
      * @throws SQLException 
      */
-    public static Parking parkReturnObject(int codigo) throws SQLException {
+    public static Parking parkReturnWithCodeObject(int codigo) throws SQLException {
 
         PreparedStatement objSQL = objCon.prepareStatement(search);
         objSQL.setInt(1, codigo);

@@ -4,6 +4,7 @@ import static database.ConnectionFactory.createConnection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import view.ParkingRegister;
+import view.Splash;
 
 public class Main {
 
@@ -16,10 +17,9 @@ public class Main {
                     break;
                 }
             }
-
-            //new Splash().setVisible(true);
+  
+            new Splash().setVisible(true);
             createConnection();
-            new ParkingRegister().setVisible(true);
 
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | 
                 javax.swing.UnsupportedLookAndFeelException | SQLException e) {

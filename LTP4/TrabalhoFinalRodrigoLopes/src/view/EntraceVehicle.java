@@ -5,16 +5,16 @@
  */
 package view;
 
+import static Controller.ControllerSalaried.consultEqualSignSalariedCtr;
+import static Controller.ControllerSalaried.salariedReturnObjectWithSignCtr;
+import static Controller.ControllerSalaried.updateDateCtr;
 import static Controller.ControllerVehicle.countVehicleCtr;
 import static Controller.ControllerVehicle.editVehicleCtr;
 import static Controller.ControllerVehicle.insertVehicleCtr;
-import static Controller.ControllerVehicle.searchAllVehicleCtr;
-import static Controller.ControllerVehicle.vehicleExitCtr;
-import static Controller.ControllerVehicle.vehicleReturnObjCtr;
-import static Utils.Generic.consultSign;
-import database.SalariedSQL;
-import static database.SalariedSQL.consultEqualSignSalaried;
-import static database.SalariedSQL.salariedReturnObjectSign;
+import static Controller.ControllerVehicle.returnAllVehiclesCtr;
+import static Controller.ControllerVehicle.updateSalariedExitDateCtr;
+import static Controller.ControllerVehicle.vehicleReturnWithCodeObjectCtr;
+import static Controller.ControllerVehicle.verifyVehicleExitEntraceCtr;
 import static database.VehicleSQL.updateVehicleExit;
 import java.awt.Color;
 import java.awt.Image;
@@ -23,8 +23,6 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Parking;
 import model.Salaried;
@@ -77,6 +75,8 @@ public class EntraceVehicle extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         slots = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Entrada e Saída de Veiculos");
@@ -95,8 +95,6 @@ public class EntraceVehicle extends javax.swing.JFrame {
             }
         });
         jScrollPaneVehicle.setViewportView(jTableCar);
-
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jLabel1.setText("Informe a placa do veiculo:");
 
@@ -123,11 +121,11 @@ public class EntraceVehicle extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextSign, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(jButtonEntrace, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,6 +170,10 @@ public class EntraceVehicle extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/park9 (1).png"))); // NOI18N
+        jLabel4.setText("Entrada e Saída de Veiculos");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -179,11 +181,21 @@ public class EntraceVehicle extends javax.swing.JFrame {
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPaneVehicle, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jSeparator1)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPaneVehicle, javax.swing.GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPaneVehicle, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -211,32 +223,35 @@ public class EntraceVehicle extends javax.swing.JFrame {
         String codeStr = (String) jTableCar.getValueAt(row, 0);
         int code = (Integer) Integer.parseInt((String) jTableCar.getValueAt(row, 0));
 
-        car = vehicleReturnObjCtr(code);
+        car = vehicleReturnWithCodeObjectCtr(code);
     }//GEN-LAST:event_jTableCarMouseClicked
 
     private void jButtonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExitActionPerformed
 
-        Timestamp dateExit = new Timestamp(System.currentTimeMillis());
-
         if (Utils.Generic.verifyObject(car)) {
             String sign = jTextSign.getText();
             //if (!vehicleExitCtr(sign)) {
-                try {
-                    if (consultEqualSignSalaried(sign)) {//Verifica se tem mensalista com a plca informada
 
-                        sal.setData_saida(dateExit);
-                        SalariedSQL.updateDate(sal);
-                        updateVehicleExit(car);
-                        showAllVehicle();
-                    } else {
-                        editVehicleCtr(car);
-                        showAllVehicle();
-                    }
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(this, ex);
+            Timestamp dateExit = new Timestamp(System.currentTimeMillis());
+
+            try {
+                if (consultEqualSignSalariedCtr(sign)) {
+
+                    updateDateCtr(dateExit, sign);
+
+                    updateSalariedExitDateCtr(car.getCodigo(), dateExit);
+
+                    updateVehicleExit(car);
+                    showAllVehicle();
+                } else {
+                    editVehicleCtr(car);
+                    showAllVehicle();
                 }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex);
+            }
             //} else {
-               // JOptionPane.showMessageDialog(this, "Este veiculo ja saiu!");
+            //JOptionPane.showMessageDialog(this, "Este veiculo ja saiu!");
             //}
         }
 
@@ -246,44 +261,35 @@ public class EntraceVehicle extends javax.swing.JFrame {
 
         if (verifySlots() && verifyFieldSign()) {
 
-            try {
+            String sign = jTextSign.getText();
+            sal = salariedReturnObjectWithSignCtr(sign);
 
-                String sign = jTextSign.getText();
-
-                sal = salariedReturnObjectSign(sign);
-
+            if (verifyVehicleExitEntraceCtr(sign,park.getCod())) {
                 if (sal != null) {
-                    //Caso tenha mensalista com o veiculo registrado
-                    if (consultSign(sign)) {
 
-                        Timestamp dataEntrace = new Timestamp(System.currentTimeMillis());
-                        Timestamp dataExit = new Timestamp(System.currentTimeMillis());
+                    Timestamp dataEntrace = new Timestamp(System.currentTimeMillis());
+                    Timestamp dataExit = new Timestamp(System.currentTimeMillis());
 
-                        car = new Vehicle(0, park.getCod(), sal.getCodigo(), sign, dataExit, dataExit, 0, park.getTarifa_por_hora(), 0);
+                    car = new Vehicle(0, park.getCod(), sal.getCodigo(), sign, dataExit, dataExit, 0, park.getTarifa_por_hora(), 0);
 
-                        insertVehicleCtr(car);
-                        showAllVehicle();
-                        slotsColors();
-                    }
+                    insertVehicleCtr(car);
+                    showAllVehicle();
+                    slotsColors();
 
                 } else {
 
-                    if (consultSign(sign)) {
+                    Timestamp dataEntrace = new Timestamp(System.currentTimeMillis());
+                    Timestamp dataExit = new Timestamp(System.currentTimeMillis());
 
-                        Timestamp dataEntrace = new Timestamp(System.currentTimeMillis());
-                        Timestamp dataExit = new Timestamp(System.currentTimeMillis());
+                    car = new Vehicle(0, park.getCod(), 0, sign, dataExit, dataExit, 0, park.getTarifa_por_hora(), 0);
 
-                        car = new Vehicle(0, park.getCod(), 0, sign, dataExit, dataExit, 0, park.getTarifa_por_hora(), 0);
-
-                        insertVehicleCtr(car);
-                        showAllVehicle();
-                        slotsColors();
-                    }
+                    insertVehicleCtr(car);
+                    showAllVehicle();
+                    slotsColors();
 
                 }
-
-            } catch (SQLException ex) {
-                Logger.getLogger(EntraceVehicle.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                JOptionPane.showMessageDialog(this, "Este veiculo ainda não saiu para dar outra entrada!");
             }
         }
     }//GEN-LAST:event_jButtonEntraceActionPerformed
@@ -321,7 +327,7 @@ public class EntraceVehicle extends javax.swing.JFrame {
 
     private void showAllVehicle() {
         try {
-            ResultSet resp = (ResultSet) searchAllVehicleCtr();
+            ResultSet resp = (ResultSet) returnAllVehiclesCtr(park.getCod());
             LtpUtil.loadFormatJTable(jScrollPaneVehicle, resp);
         } catch (SQLException | LtpUtilException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -379,10 +385,12 @@ public class EntraceVehicle extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPaneVehicle;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTableCar;
     private javax.swing.JTextField jTextSign;
     private javax.swing.JLabel slots;

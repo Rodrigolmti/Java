@@ -8,12 +8,15 @@ package Controller;
 import static database.SalariedSQL.consultEqualSignSalaried;
 import static database.SalariedSQL.deleteSalaried;
 import static database.SalariedSQL.insertSalaried;
+import static database.SalariedSQL.salariedReturnObject;
+import static database.SalariedSQL.salariedReturnObjectWithSign;
 import static database.SalariedSQL.searchAllSalaried;
 import static database.SalariedSQL.searchSalaried;
+import static database.SalariedSQL.searchSalariedWithName;
 import static database.SalariedSQL.updateDate;
 import static database.SalariedSQL.updateDateExit;
 import static database.SalariedSQL.updateSalaried;
-import static database.VehicleSQL.cosultVehicleSign;
+import static database.VehicleSQL.searchVehicleWithSign;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -26,7 +29,8 @@ public class ControllerSalaried {
 
     /**
      * Insere um novo mensalista no banco
-     * @param obj 
+     *
+     * @param obj
      */
     public static void insertSalariedCtr(Salaried obj) {
         try {
@@ -47,10 +51,11 @@ public class ControllerSalaried {
             JOptionPane.showMessageDialog(null, ex);
         }
     }
-    
+
     /**
      * Edita um mensalista do banco
-     * @param sal 
+     *
+     * @param sal
      */
     public static void editSalariedCtr(Salaried sal) {
         try {
@@ -59,10 +64,18 @@ public class ControllerSalaried {
             JOptionPane.showMessageDialog(null, ex);
         }
     }
-    
+
     public static void updateDateExitCtr(Timestamp date, int code) {
         try {
-            updateDateExit(date,code);
+            updateDateExit(date, code);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+
+    public static void updateDateCtr(Timestamp date, String sign) {
+        try {
+            updateDate(date, sign);
         } catch (SQLException ex) {
             Logger.getLogger(ControllerSalaried.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -70,6 +83,7 @@ public class ControllerSalaried {
 
     /**
      * Procura por um mensalista com o codigo informado
+     *
      * @param code
      * @return ResultSet result
      */
@@ -82,15 +96,26 @@ public class ControllerSalaried {
         }
         return null;
     }
+    
+    public static ResultSet searchSalariedNameCtr(String name, int code) {
+        try {
+            ResultSet result = searchSalariedWithName(name, code);
+            return result;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return null;
+    }
 
     /**
      * Consulta um mensalista com a placa informada
+     *
      * @param sign
      * @return boolean
      */
-    public static boolean consultSignSalariedCtr(String sign) {
+    public static boolean searchVehicleWithSignCtr(String sign) {
         try {
-            return cosultVehicleSign(sign);
+            return searchVehicleWithSign(sign);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
@@ -99,6 +124,7 @@ public class ControllerSalaried {
 
     /**
      * Consulta se ja tem um mensalista com a placa informada
+     *
      * @param sign
      * @return boolean
      */
@@ -110,14 +136,34 @@ public class ControllerSalaried {
         }
         return false;
     }
+
+    public static Salaried salariedReturnObjectWithSignCtr(String sign) {
+        try {
+            return salariedReturnObjectWithSign(sign);
+        } catch (SQLException ex) {
+            Logger.getLogger(ControllerSalaried.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
+    public static Salaried salariedReturnObjectWithCodeCtr(int code) {
+        try {
+            return salariedReturnObject(code);
+        } catch (SQLException ex) {
+            Logger.getLogger(ControllerSalaried.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     /**
      * Retorna todos os mensalista cadastrados no banco
+     *
+     * @param code
      * @return ResultSet result
      */
-    public static ResultSet returnAllSalariedCtr() {
+    public static ResultSet returnAllSalariedCtr(int code) {
         try {
-            ResultSet result = searchAllSalaried();
+            ResultSet result = searchAllSalaried(code);
             return result;
         } catch (SQLException ex) {
             Logger.getLogger(ControllerSalaried.class.getName()).log(Level.SEVERE, null, ex);

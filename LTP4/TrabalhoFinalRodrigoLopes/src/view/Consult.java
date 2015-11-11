@@ -5,31 +5,32 @@
  */
 package view;
 
+import static Controller.ControllerVehicle.CountWithDatesNotSalariedCtr;
+import static Controller.ControllerVehicle.CountWithDatesSalariedCtr;
+import static Controller.ControllerVehicle.countWithDatesTotalCtr;
+import static Controller.ControllerVehicle.returnVehiclesWithCodeParkCtr;
 import static database.VehicleSQL.countVehicle;
 import static database.VehicleSQL.countVehicleIsNotSalaried;
 import static database.VehicleSQL.countVehicleIsSalaried;
-import static database.VehicleSQL.searchVehiclesCode;
-import static database.VehicleSQL.sum;
-import static database.VehicleSQL.sumNotSalaried;
-import static database.VehicleSQL.sumSalaried;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
+import model.Parking;
 import utilitarios.LtpUtil;
 import utilitarios.LtpUtilException;
+import static view.ParkingRegister.returnObject;
 
 /**
  *
  * @author rodrigo.martins
  */
 public class Consult extends javax.swing.JFrame {
+
+    private static Parking park = returnObject();
 
     /**
      * Creates new form Consult
@@ -38,6 +39,7 @@ public class Consult extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setVisible(true);
+        jTextFieldCode.setText(String.valueOf(park.getCod()));
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         URL url = this.getClass().getResource("/images/Parking-32.png");
         Image imagemTitulo = Toolkit.getDefaultToolkit().getImage(url);
@@ -78,6 +80,10 @@ public class Consult extends javax.swing.JFrame {
         Date1 = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         Date2 = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -108,6 +114,8 @@ public class Consult extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Ticket-24.png"))); // NOI18N
         jLabel1.setText("Codigo Estacionamento:");
 
+        jTextFieldCode.setEditable(false);
+
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Search-24.png"))); // NOI18N
         jButton1.setText("Consultar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -123,10 +131,12 @@ public class Consult extends javax.swing.JFrame {
 
         count.setText("***");
 
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Car-24.png"))); // NOI18N
         jLabel3.setText("Veiculos horistas:");
 
         countHour.setText("***");
 
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Car-24.png"))); // NOI18N
         jLabel4.setText("Veiculos Mensalistas:");
 
         countSalaried.setText("***");
@@ -136,10 +146,12 @@ public class Consult extends javax.swing.JFrame {
 
         billing.setText("***");
 
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/paper-bill.png"))); // NOI18N
         jLabel8.setText("Faturamento Horista:");
 
         billingNotSalaried.setText("***");
 
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cash3.png"))); // NOI18N
         jLabel10.setText("Faturamento Mensalista:");
 
         billingSalaried.setText("***");
@@ -150,46 +162,54 @@ public class Consult extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(count)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(countHour)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(countSalaried)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(billing)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8)
-                .addGap(14, 14, 14)
-                .addComponent(billingNotSalaried)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(billingSalaried)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(billing, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(count, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(countHour, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(countSalaried, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(billingNotSalaried, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addComponent(billingSalaried, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(3, 3, 3))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(count)
+                    .addComponent(count))
+                .addGap(48, 48, 48)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(countHour)
+                    .addComponent(countHour))
+                .addGap(56, 56, 56)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(countSalaried)
+                    .addComponent(countSalaried))
+                .addGap(65, 65, 65)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(billing)
+                    .addComponent(billing))
+                .addGap(57, 57, 57)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(billingNotSalaried)
+                    .addComponent(billingNotSalaried))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(billingSalaried))
                 .addContainerGap())
@@ -199,46 +219,79 @@ public class Consult extends javax.swing.JFrame {
 
         jLabel12.setText("Entre");
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Sheet of Paper-50.png"))); // NOI18N
+        jLabel5.setText("Consultas Mensalista");
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Info-24.png"))); // NOI18N
+        jLabel9.setText("Informe as datas de pesquisas nos seguintes formatos!");
+
+        jLabel11.setText("Exemplo: 01/01/2015 08:00:00");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextFieldCode, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Date1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Date2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldCode, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(Date1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(Date2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addGap(117, 117, 117)))))
                 .addContainerGap())
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {Date1, Date2});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(jTextFieldCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7)
-                        .addComponent(Date1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel12)
-                        .addComponent(Date2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel5)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel11)))
+                .addGap(9, 9, 9)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextFieldCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(Date1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12)
+                    .addComponent(Date2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -249,7 +302,7 @@ public class Consult extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -257,54 +310,54 @@ public class Consult extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        if (!(jTextFieldCode.getText().isEmpty())) {
-            int code = (Integer) Integer.parseInt(jTextFieldCode.getText());
+        park = returnObject();
 
-            try {
-                ResultSet resp = (ResultSet) searchVehiclesCode(code);
-                LtpUtil.loadFormatJTable(jScrollPane1, resp);
-                count();
-            } catch (SQLException | LtpUtilException e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
-            }
-
-        } else {
-            JOptionPane.showMessageDialog(this, "Informe o codigo do estacionamento!");
+        try {
+            ResultSet resp = (ResultSet) returnVehiclesWithCodeParkCtr(park.getCod());
+            LtpUtil.loadFormatJTable(jScrollPane1, resp);
+            count();
+        } catch (SQLException | LtpUtilException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void count() {
 
-        int code = (Integer) Integer.parseInt(jTextFieldCode.getText());
-
         try {
 
-            int a = countVehicle();
-            int b = countVehicleIsNotSalaried();
-            int c = countVehicleIsSalaried();
+            int countTotal = countVehicle();
+            int countTotalNotSalaried = countVehicleIsNotSalaried();
+            int countTotalSalaried = countVehicleIsSalaried();
 
-            SimpleDateFormat formatDate = new SimpleDateFormat("dd-mm-yyyy hh:mm:ss");
-            java.util.Date invoiceDateOne = formatDate.parse(Date1.getText());
-            Date sqlDateOne = new java.sql.Date(invoiceDateOne.getTime());
-            Timestamp sqlTimeOne = new Timestamp(sqlDateOne.getTime());
+            Date dateOne = new Date(System.currentTimeMillis());
+            Date dateTwo = new Date(System.currentTimeMillis());
 
-            java.util.Date invoiceDateTwo = formatDate.parse(Date2.getText());
-            Date sqlDateTwo = new java.sql.Date(invoiceDateOne.getTime());
-            Timestamp sqlTimeTwo = new Timestamp(sqlDateTwo.getTime());
+            if (!LtpUtil.validarDataHora(Date1.getText(), dateOne)) {
+                JOptionPane.showMessageDialog(this, "Erro ao converter / verifique a data");
+            }
 
-            Float sumStr = sum(sqlTimeOne, sqlTimeTwo);
-            float d = sumSalaried(sqlTimeOne, sqlTimeTwo);
-            float e = sumNotSalaried(sqlTimeOne, sqlTimeTwo);
+            if (!LtpUtil.validarDataHora(Date2.getText(), dateTwo)) {
+                JOptionPane.showMessageDialog(this, "Erro ao converter / verifique a data");
+            }
 
-            billing.setText(String.valueOf(sumStr));
-            billingSalaried.setText(String.valueOf(d));
-            billingNotSalaried.setText(String.valueOf(e));
+            if (dateOne.after(dateTwo)) {
+                JOptionPane.showMessageDialog(this, "Segunda data menor do que a primeira!");
+            }
 
-            count.setText(String.valueOf(a));
-            countHour.setText(String.valueOf(b));
-            countSalaried.setText(String.valueOf(c));
+            Float countSumTotal = countWithDatesTotalCtr(dateOne, dateTwo);
+            float countSumSalaried = CountWithDatesSalariedCtr(dateOne, dateTwo);
+            float countSumNotSalaried = CountWithDatesNotSalariedCtr(dateOne, dateTwo);
 
-        } catch (SQLException | ParseException e) {
+            billing.setText(String.valueOf(countSumTotal));
+            billingSalaried.setText(String.valueOf(countSumSalaried));
+            billingNotSalaried.setText(String.valueOf(countSumNotSalaried));
+
+            count.setText(String.valueOf(countTotal));
+            countHour.setText(String.valueOf(countTotalNotSalaried));
+            countSalaried.setText(String.valueOf(countTotalSalaried));
+
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
 
@@ -357,17 +410,21 @@ public class Consult extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextFieldCode;

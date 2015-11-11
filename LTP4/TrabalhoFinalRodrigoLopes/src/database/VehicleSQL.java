@@ -7,6 +7,7 @@ package database;
 
 import static database.ConnectionFactory.returnObjectSQL;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,13 +27,9 @@ public class VehicleSQL {
     /* ============== SALARIED VEHICLE ======================= */
     private static final String insertVehicle = "INSERT INTO REG_ES_VEICULO (COD_ESTACIONAMENTO, CODIGO, PLACA, ENTRADA, TARIFA_POR_HORA) VALUES (?,?,?,CURRENT_TIMESTAMP,?)";
     /* ============== VEHICLE SEARCH ========================= */
-    private static final String allVehicles = "SELECT *FROM REG_ES_VEICULO";
-    /* ============== VEHICLE SEARCH SIGN ===================== */
-    private static final String searchVehicleSign = "SELECT *FROM REG_ES_VEICULO WHERE PLACA = ?";
+    private static final String allVehicles = "SELECT *FROM REG_ES_VEICULO WHERE COD_ESTACIONAMENTO =?";
     /* ============== VEHICLE SEARCH SIGN ===================== */
     private static final String searchVehicleExit = "SELECT *FROM REG_ES_VEICULO WHERE PLACA =? AND SAIDA IS NULL";
-    /* ============== VEHICLE SEARCH SIGN ===================== */
-    private static final String vehicleExit = "SELECT *FROM REG_ES_VEICULO WHERE PLACA =? AND SAIDA IS NOT NULL";
     /* ============== VEHICLE SEARCH SALARIED ================= */
     private static final String searchSignNotSalaried = "SELECT *FROM REG_ES_VEICULO WHERE CODIGO = 0";
     /* ============== VEHICLE SEARCH SALARIED NOT NULL ======== */
@@ -51,9 +48,9 @@ public class VehicleSQL {
     private static final String updateVihicleExit = "UPDATE REG_ES_VEICULO SET SAIDA = CURRENT_TIMESTAMP, PERMANENCIA_EM_HORAS = (CURRENT_TIMESTAMP - ENTRADA) * 24.0, VALOR_PAGO = (CURRENT_TIMESTAMP - ENTRADA) * 24.0 *  TARIFA_POR_HORA WHERE NOTICKET = ? AND CODIGO = 0";
     /* ============== VEHICLE COUNT ========================== */
     private static final String count = "SELECT *FROM REG_ES_VEICULO";
-    /* ============== VEHICLE COUNT ========================== */
-    private static final String salariedExit = "UPDATE REG_ES_VEICULO SET SAIDA =?, VALOR_PAGO = ? WHERE NOTICKET =?";
-    /* ============== INSERT VEHICLE ======================== */
+    /* ============== VEHICLE EXIT ========================== */
+    private static final String verifyVehicleExit = "SELECT *FROM REG_ES_VEICULO WHERE PLACA =? AND COD_ESTACIONAMENTO =? AND ENTRADA IS NOT NULL AND SAIDA IS NOT NULL";
+
     /**
      * Insere um veiculo no banco de dados
      *
@@ -99,14 +96,20 @@ public class VehicleSQL {
             objCon.setAutoCommit(true);
         }
     }
-    
-    public static void updateSalariedExit(int code, Timestamp date, double price) throws SQLException {
+
+    /**
+     * Atualiza a data de saida de um veiculo
+     *
+     * @param code
+     * @param date
+     * @throws SQLException
+     */
+    public static void updateSalariedExitDate(int code, Timestamp date) throws SQLException {
 
         objCon.setAutoCommit(false);
         try {
-            objCons = objCon.prepareStatement(salariedExit);
+            objCons = objCon.prepareStatement(updateVihicleExit);
             objCons.setTimestamp(1, date);
-            objCons.setDouble(2, price);
             objCons.setInt(3, code);
             objCons.execute();
             objCon.commit();
@@ -118,26 +121,32 @@ public class VehicleSQL {
         }
     }
 
+    /*
+     ############################################################################
+     PESQUISAS DE VEICULOS.
+     ############################################################################
+     */
     /**
      * Retorna todos os veiculos cadastrados no banco de dados
-     *
-     * @return ResultSet result
-     * @throws SQLException
-     */
-    public static ResultSet searchAllVehicles() throws SQLException {
-        PreparedStatement objSQL
-                = objCon.prepareStatement(allVehicles);
-        return objSQL.executeQuery();
-    }
-
-    /**
-     * Retorna o veiculo com o codigo informado
      *
      * @param code
      * @return ResultSet result
      * @throws SQLException
      */
-    public static ResultSet searchVehiclesCode(int code) throws SQLException {
+    public static ResultSet returnAllVehicles(int code) throws SQLException {
+        PreparedStatement objSQL = objCon.prepareStatement(allVehicles);
+        objSQL.setInt(1, code);
+        return objSQL.executeQuery();
+    }
+
+    /**
+     * Retorna os veiculos com o codigo informado
+     *
+     * @param code
+     * @return ResultSet result
+     * @throws SQLException
+     */
+    public static ResultSet returnVehiclesWithCodePark(int code) throws SQLException {
         PreparedStatement objSQL = objCon.prepareStatement(searchVehicleCode);
         objSQL.setInt(1, code);
         return objSQL.executeQuery();
@@ -150,7 +159,7 @@ public class VehicleSQL {
      * @return boolean
      * @throws SQLException
      */
-    public static boolean cosultVehicleSign(String sign) throws SQLException {
+    public static boolean searchVehicleWithSign(String sign) throws SQLException {
 
         PreparedStatement objSQL = objCon.prepareStatement(searchVehicleExit);
         objSQL.setString(1, sign);
@@ -159,34 +168,28 @@ public class VehicleSQL {
     }
 
     /**
-     * Consulta um veiculo com a aplca informada
+     * Verifica so o veiculo tem entrada e saida para liberar a entrada
+     * novamente
      *
      * @param sign
-     * @return boolean
+     * @param code
+     * @return
      * @throws SQLException
      */
-    public static boolean consultSign(String sign) throws SQLException {
+    public static boolean verifyVehicleExitEntrace(String sign, int code) throws SQLException {
 
-        PreparedStatement objSQL = objCon.prepareStatement(searchVehicleSign);
+        PreparedStatement objSQL = objCon.prepareStatement(verifyVehicleExit);
         objSQL.setString(1, sign);
+        objSQL.setInt(2, code);
         ResultSet objResp = objSQL.executeQuery();
         return objResp.next();
     }
-    
-    /**
-     * Verifica se a saida do veiculo esta vazia
-     * @param sign
-     * @return ResultSet result
-     * @throws SQLException 
+
+    /*
+     ############################################################################
+     SOMA DA QUANTIDADE DE VEICULOS HOSRISTAS E MENSALISTAS
+     ############################################################################
      */
-    public static boolean vehicleExit(String sign) throws SQLException {
-
-        PreparedStatement objSQL = objCon.prepareStatement(vehicleExit);
-        objSQL.setString(1, sign);
-        ResultSet objResp = objSQL.executeQuery();
-        return objResp.next();
-    }
-
     /**
      * Conta quantos veiculos tem no banco
      *
@@ -242,6 +245,11 @@ public class VehicleSQL {
         return countRegister;
     }
 
+    /*
+     ############################################################################
+     SOMA DE VALORES TOTAIS DE VEICULOS, HORISTAS E MENSALISTAS.
+     ############################################################################
+     */
     /**
      * Faz a soma dos valores pagos e retorna o valor total
      *
@@ -250,11 +258,11 @@ public class VehicleSQL {
      * @return float sumValue
      * @throws SQLException
      */
-    public static Float sum(Timestamp one, Timestamp two) throws SQLException {
+    public static Float countWithDatesTotal(Date one, Date two) throws SQLException {
 
         PreparedStatement objSQL = objCon.prepareStatement(sumValueTotal);
-        objSQL.setTimestamp(1, one);
-        objSQL.setTimestamp(2, two);
+        objSQL.setDate(1, one);
+        objSQL.setDate(2, two);
         ResultSet resp = objSQL.executeQuery();
 
         resp.next();
@@ -271,11 +279,11 @@ public class VehicleSQL {
      * @return float sumValue
      * @throws SQLException
      */
-    public static Float sumSalaried(Timestamp one, Timestamp two) throws SQLException {
+    public static Float countWithDatesSalaried(Date one, Date two) throws SQLException {
 
         PreparedStatement objSQL = objCon.prepareStatement(sumValueTotalSalaried);
-        objSQL.setTimestamp(1, one);
-        objSQL.setTimestamp(2, two);
+        objSQL.setDate(1, one);
+        objSQL.setDate(2, two);
         ResultSet resp = objSQL.executeQuery();
 
         resp.next();
@@ -292,11 +300,11 @@ public class VehicleSQL {
      * @return float sumValue
      * @throws SQLException
      */
-    public static Float sumNotSalaried(Timestamp one, Timestamp two) throws SQLException {
+    public static Float countWithDatesNotSalaried(Date one, Date two) throws SQLException {
 
         PreparedStatement objSQL = objCon.prepareStatement(sumValueTotalNotSalaried);
-        objSQL.setTimestamp(1, one);
-        objSQL.setTimestamp(2, two);
+        objSQL.setDate(1, one);
+        objSQL.setDate(2, two);
         ResultSet resp = objSQL.executeQuery();
 
         resp.next();
@@ -312,7 +320,7 @@ public class VehicleSQL {
      * @return Vehicle obj
      * @throws SQLException
      */
-    public static Vehicle vehicleReturnObject(int code) throws SQLException {
+    public static Vehicle vehicleReturnWithCodeObject(int code) throws SQLException {
 
         PreparedStatement objSQL = objCon.prepareStatement(searchVehicle);
         objSQL.setInt(1, code);

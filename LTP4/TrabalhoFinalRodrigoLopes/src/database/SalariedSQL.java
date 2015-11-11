@@ -27,12 +27,14 @@ public class SalariedSQL {
     private static final String insertSalaried = "INSERT INTO MENSALISTA (COD_ESTACIONAMENTO, NOME, TELEFONE, PLACA, DATA_ENTRADA) VALUES (?,?,?,?,CURRENT_TIMESTAMP)";
     /* ============== SALARIED SEARCH ======================== */
     private static final String searchSalaried = "SELECT *FROM MENSALISTA WHERE CODIGO = ?";
+    /* ============== SALARIED SEARCH ======================== */
+    private static final String searchSalariedWithName = "SELECT * FROM MENSALISTA WHERE NOME LIKE ? AND COD_ESTACIONAMENTO =? ORDER BY NOME";
     /* ============== SALARIED SEARCH SIGN =================== */
-    private static final String searchSign = "SELECT PLACA FROM MENSALISTA WHERE PLACA = ?";
+    private static final String searchSign = "SELECT *FROM MENSALISTA WHERE PLACA = ?";
     /* ============== SALARIED SEARCH SIGN =================== */
     private static final String searchSignCod = "SELECT *FROM MENSALISTA WHERE PLACA = ?";
     /* ============== SALARIED SEARCH ======================== */
-    private static final String allSalaried = "SELECT *FROM MENSALISTA";
+    private static final String allSalaried = "SELECT *FROM MENSALISTA WHERE COD_ESTACIONAMENTO =?";
     /* ============== SALARIED UPDATE ======================== */
     private static final String updateSalaried = "UPDATE MENSALISTA SET NOME =?, TELEFONE =?, PLACA =? WHERE CODIGO =?";
     /* ============== SALARIED UPDATE ======================== */
@@ -91,15 +93,16 @@ public class SalariedSQL {
     
     /**
      * Edita o campo hora de saida no mensalista
-     * @param objSal
+     * @param date
+     * @param sign
      * @throws SQLException 
      */
-    public static void updateDate(Salaried objSal) throws SQLException {
+    public static void updateDate(Timestamp date, String sign) throws SQLException {
         objCon.setAutoCommit(false);
         try {
             objCons = objCon.prepareStatement(updateDate);
-            objCons.setTimestamp(1, objSal.getData_saida());
-            objCons.setString(2, objSal.getPlaca());
+            objCons.setTimestamp(1, date);
+            objCons.setString(2, sign);
             objCons.execute();
             objCon.commit();
         } catch (SQLException e) {
@@ -140,12 +143,13 @@ public class SalariedSQL {
     
     /**
      * Return all registers on dataBase
+     * @param code
      * @return
      * @throws SQLException 
      */
-    public static ResultSet searchAllSalaried() throws SQLException {
-        PreparedStatement objSQL
-                = objCon.prepareStatement(allSalaried);
+    public static ResultSet searchAllSalaried(int code) throws SQLException {
+        PreparedStatement objSQL = objCon.prepareStatement(allSalaried);
+        objSQL.setInt(1, code);
         return objSQL.executeQuery();
     }
 
@@ -159,6 +163,13 @@ public class SalariedSQL {
         PreparedStatement objSQL
                 = objCon.prepareStatement(searchSalaried);
         objSQL.setInt(1, code);
+        return objSQL.executeQuery();
+    }
+    
+    public static ResultSet searchSalariedWithName(String name, int code) throws SQLException {
+        PreparedStatement objSQL = objCon.prepareStatement(searchSalariedWithName);
+        objSQL.setString(1, "%" + name + "%");
+        objSQL.setInt(2, code);
         return objSQL.executeQuery();
     }
 
@@ -220,7 +231,7 @@ public class SalariedSQL {
      * @return
      * @throws SQLException 
      */
-    public static Salaried salariedReturnObjectSign(String sign) throws SQLException {
+    public static Salaried salariedReturnObjectWithSign(String sign) throws SQLException {
 
         PreparedStatement objSQL = objCon.prepareStatement(searchSignCod);
         objSQL.setString(1, sign);

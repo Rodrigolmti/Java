@@ -6,21 +6,27 @@
 package view;
 
 import static Controller.ControllerSalaried.consultEqualSignSalariedCtr;
-import static Controller.ControllerSalaried.consultSignSalariedCtr;
 import static Controller.ControllerSalaried.deleteSalariedCtr;
 import static Controller.ControllerSalaried.editSalariedCtr;
 import static Controller.ControllerSalaried.insertSalariedCtr;
 import static Controller.ControllerSalaried.returnAllSalariedCtr;
 import static Controller.ControllerSalaried.searchSalariedCodeCtr;
+import static Controller.ControllerSalaried.searchSalariedNameCtr;
+import static Controller.ControllerSalaried.searchVehicleWithSignCtr;
 import static Utils.Generic.verifyObject;
+import static database.ConnectionFactory.returnObjectSQL;
 import static database.SalariedSQL.salariedReturnObject;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionListener;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import model.Parking;
 import model.Salaried;
 import utilitarios.LtpUtil;
@@ -36,6 +42,9 @@ public class SalariedRegister extends javax.swing.JFrame {
      */
     static Salaried sal = null;
     static Parking park = ParkingRegister.returnObject();
+    private static final Connection objCon = returnObjectSQL();
+    private Timer t;
+    private ActionListener al;
 
     /**
      * Construtor
@@ -78,18 +87,22 @@ public class SalariedRegister extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jTextFieldEntrace = new javax.swing.JTextField();
         jTextFieldExit = new javax.swing.JTextField();
-        jBtnEdit = new javax.swing.JButton();
-        jBtnRegister2 = new javax.swing.JButton();
-        jBtnOpenPark3 = new javax.swing.JButton();
-        jButtonClear = new javax.swing.JButton();
-        jBtnDelete3 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         status = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButtonClear = new javax.swing.JButton();
+        jBtnEdit = new javax.swing.JButton();
+        jBtnDelete3 = new javax.swing.JButton();
+        jBtnOpenPark3 = new javax.swing.JButton();
+        jBtnRegister2 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Registro de Mensalista");
 
         jTableSalaried.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -111,6 +124,7 @@ public class SalariedRegister extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados"));
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Search-24.png"))); // NOI18N
         jLabel1.setText("Codigo Mensalista:");
 
         jLabel2.setText("Codigo Estacionamento:");
@@ -131,101 +145,44 @@ public class SalariedRegister extends javax.swing.JFrame {
 
         jTextFieldExit.setEditable(false);
 
-        jBtnEdit.setForeground(new java.awt.Color(153, 0, 153));
-        jBtnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Process-24.png"))); // NOI18N
-        jBtnEdit.setText("Atualizar Registros");
-        jBtnEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnEditjBtnEditActionPerformed(evt);
-            }
-        });
-
-        jBtnRegister2.setForeground(new java.awt.Color(0, 153, 51));
-        jBtnRegister2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Plus-24.png"))); // NOI18N
-        jBtnRegister2.setText("Registar Mensalista");
-        jBtnRegister2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnRegister2jBtnRegisterActionPerformed(evt);
-            }
-        });
-
-        jBtnOpenPark3.setForeground(new java.awt.Color(0, 153, 204));
-        jBtnOpenPark3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Search-24.png"))); // NOI18N
-        jBtnOpenPark3.setText("Pesquisar Estacionamento");
-        jBtnOpenPark3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnOpenPark3jBtnOpenParkActionPerformed(evt);
-            }
-        });
-
-        jButtonClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Eraser-24.png"))); // NOI18N
-        jButtonClear.setText("Limpar e Refazer");
-        jButtonClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonClearActionPerformed(evt);
-            }
-        });
-
-        jBtnDelete3.setForeground(new java.awt.Color(153, 153, 153));
-        jBtnDelete3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Cancel-24.png"))); // NOI18N
-        jBtnDelete3.setText("Cancelar Contrato");
-        jBtnDelete3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnDelete3jBtnDeleteActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldCodeSalaried, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                            .addComponent(jTextFieldCodePark)))
-                    .addComponent(jButtonClear, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextFieldCodeSalaried, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                    .addComponent(jTextFieldCodePark))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(98, 98, 98)
-                                .addComponent(jLabel3))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addGap(83, 83, 83)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jTextFieldPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextFieldSign)))
-                        .addGap(54, 54, 54)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldEntrace)
-                            .addComponent(jTextFieldExit, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))
-                        .addGap(0, 92, Short.MAX_VALUE))
+                        .addGap(98, 98, 98)
+                        .addComponent(jLabel3))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(83, 83, 83)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnEdit)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnDelete3, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnOpenPark3, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnRegister2))))
+                        .addComponent(jTextFieldPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextFieldSign)))
+                .addGap(54, 54, 54)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextFieldEntrace)
+                    .addComponent(jTextFieldExit, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,14 +205,7 @@ public class SalariedRegister extends javax.swing.JFrame {
                     .addComponent(jTextFieldSign, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
                     .addComponent(jTextFieldExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonClear)
-                    .addComponent(jBtnEdit)
-                    .addComponent(jBtnRegister2)
-                    .addComponent(jBtnOpenPark3)
-                    .addComponent(jBtnDelete3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Status"));
@@ -263,7 +213,13 @@ public class SalariedRegister extends javax.swing.JFrame {
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Info-24.png"))); // NOI18N
         jLabel8.setText("Mensalista Ativo:");
 
-        jLabel10.setText("Antes remover um mensalista verifique se o mesmo esta ativo!");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/News-24.png"))); // NOI18N
+        jButton1.setText("Relatorio Mensalistas ativos");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -271,46 +227,131 @@ public class SalariedRegister extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75)
+                .addGap(67, 67, 67)
                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel10)
+                .addComponent(jButton1)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel8))
-                    .addComponent(status, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jButton1))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
+
+        jButtonClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Eraser-24.png"))); // NOI18N
+        jButtonClear.setText("Limpar e Refazer");
+        jButtonClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonClearActionPerformed(evt);
+            }
+        });
+
+        jBtnEdit.setForeground(new java.awt.Color(153, 0, 153));
+        jBtnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Process-24.png"))); // NOI18N
+        jBtnEdit.setText("Atualizar Registros");
+        jBtnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnEditjBtnEditActionPerformed(evt);
+            }
+        });
+
+        jBtnDelete3.setForeground(new java.awt.Color(153, 153, 153));
+        jBtnDelete3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Cancel-24.png"))); // NOI18N
+        jBtnDelete3.setText("Cancelar Contrato");
+        jBtnDelete3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnDelete3jBtnDeleteActionPerformed(evt);
+            }
+        });
+
+        jBtnOpenPark3.setForeground(new java.awt.Color(0, 153, 204));
+        jBtnOpenPark3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Search-24.png"))); // NOI18N
+        jBtnOpenPark3.setText("Pesquisar Mensalista");
+        jBtnOpenPark3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnOpenPark3jBtnOpenParkActionPerformed(evt);
+            }
+        });
+
+        jBtnRegister2.setForeground(new java.awt.Color(0, 153, 51));
+        jBtnRegister2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Plus-24.png"))); // NOI18N
+        jBtnRegister2.setText("Registar Mensalista");
+        jBtnRegister2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnRegister2jBtnRegisterActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Contact Card-50.png"))); // NOI18N
+        jLabel10.setText("Cadastro de Mensalista");
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Info-24.png"))); // NOI18N
+        jLabel11.setText("Utilize o campo \"Codigo Mensalista para pesquisas!");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButtonClear, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnEdit, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnDelete3, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnOpenPark3, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnRegister2, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel11)))
+                .addContainerGap())
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonClear)
+                    .addComponent(jBtnEdit)
+                    .addComponent(jBtnRegister2)
+                    .addComponent(jBtnOpenPark3)
+                    .addComponent(jBtnDelete3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -329,7 +370,8 @@ public class SalariedRegister extends javax.swing.JFrame {
 
     /**
      * Metodo evento para o botão de editar
-     * @param evt 
+     *
+     * @param evt
      */
     private void jBtnEditjBtnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEditjBtnEditActionPerformed
 
@@ -349,11 +391,13 @@ public class SalariedRegister extends javax.swing.JFrame {
                 sal.setPlaca(sign);
                 editSalariedCtr(sal);
                 showAllSalarieds();
+                JOptionPane.showMessageDialog(this, "Mensalista atualizado!");
             } else {
                 if (consultSign(sign)) {
                     sal.setPlaca(sign);
                     editSalariedCtr(sal);
                     showAllSalarieds();
+                    JOptionPane.showMessageDialog(this, "Mensalista atualizado!");
                 }
             }
         }
@@ -361,7 +405,8 @@ public class SalariedRegister extends javax.swing.JFrame {
 
     /**
      * Metodo para o evento do botão de remover
-     * @param evt 
+     *
+     * @param evt
      */
     private void jBtnDelete3jBtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDelete3jBtnDeleteActionPerformed
 
@@ -378,7 +423,8 @@ public class SalariedRegister extends javax.swing.JFrame {
 
     /**
      * Metodo para o evento do botão registrar
-     * @param evt 
+     *
+     * @param evt
      */
     private void jBtnRegister2jBtnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnRegister2jBtnRegisterActionPerformed
 
@@ -398,28 +444,53 @@ public class SalariedRegister extends javax.swing.JFrame {
 
     /**
      * Metodo para o evento do botão abrir estacionamento
-     * @param evt 
+     *
+     * @param evt
      */
     private void jBtnOpenPark3jBtnOpenParkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnOpenPark3jBtnOpenParkActionPerformed
 
-        if (!(jTextFieldCodeSalaried.getText().isEmpty())) {
-            int code = (Integer) Integer.parseInt(jTextFieldCodeSalaried.getText());
+        if (!jTextFieldCodeSalaried.getText().isEmpty() || !jTextFieldName.getText().isEmpty()) {
 
-            try {
-                ResultSet resp = (ResultSet) searchSalariedCodeCtr(code);
-                LtpUtil.loadFormatJTable(jScrollPane1, resp);
-            } catch (SQLException | LtpUtilException e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
+            if (!jTextFieldCodeSalaried.getText().isEmpty() && jTextFieldName.getText().isEmpty()) {
+
+                if (!(jTextFieldCodeSalaried.getText().isEmpty())) {
+                    int code = (Integer) Integer.parseInt(jTextFieldCodeSalaried.getText());
+
+                    try {
+                        ResultSet resp = (ResultSet) searchSalariedCodeCtr(code);
+                        LtpUtil.loadFormatJTable(jScrollPane1, resp);
+                    } catch (SQLException | LtpUtilException e) {
+                        JOptionPane.showMessageDialog(this, e.getMessage());
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Informe do mensalista para efetuar a pesquisa!");
+                }
+            } else {
+                if (jTextFieldCodeSalaried.getText().isEmpty() && !jTextFieldName.getText().isEmpty()) {
+
+                    String name = jTextFieldName.getText();
+
+                    try {
+                        ResultSet resp = (ResultSet) searchSalariedNameCtr(name, park.getCod());
+                        LtpUtil.loadFormatJTable(jScrollPane1, resp);
+                    } catch (SQLException | LtpUtilException e) {
+                        JOptionPane.showMessageDialog(this, e.getMessage());
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Informe apenas um campo!");
+                }
             }
+
         } else {
-            JOptionPane.showMessageDialog(this, "Informe do mensalista para efetuar a pesquisa!");
+            JOptionPane.showMessageDialog(this, "Informe um nome ou codigo para aa pesquisa!");
         }
 
     }//GEN-LAST:event_jBtnOpenPark3jBtnOpenParkActionPerformed
 
     /**
      * Metodo para o evento de selecionar o estacionamento na tabela
-     * @param evt 
+     *
+     * @param evt
      */
     private void jTableSalariedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableSalariedMouseClicked
 
@@ -438,7 +509,7 @@ public class SalariedRegister extends javax.swing.JFrame {
             jTextFieldSign.setText(sal.getPlaca());
 
             String sign = jTextFieldSign.getText();
-            if (consultSignSalariedCtr(sign)) {
+            if (searchVehicleWithSignCtr(sign)) {
                 status.setForeground(Color.BLUE);
                 status.setText("SIM");
             } else {
@@ -456,7 +527,8 @@ public class SalariedRegister extends javax.swing.JFrame {
 
     /**
      * Metodo para o evento do botão de limprar
-     * @param evt 
+     *
+     * @param evt
      */
     private void jButtonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonClearActionPerformed
 
@@ -467,6 +539,26 @@ public class SalariedRegister extends javax.swing.JFrame {
         showAllSalarieds();
 
     }//GEN-LAST:event_jButtonClearActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("codigo", Integer.parseInt(jTextFieldCodeSalaried.getText()));
+
+        try {
+
+            LtpUtil.gerarRelatorio(
+                    LtpUtil.RELATORIO_VISUALIZADOR_JASPER,
+                    objCon,
+                    parameters,
+                    getClass().getResource("/Report/RelatorioMensalistaAtivo.jasper").openStream(),
+                    "Relatorio de mensalistas ativos");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e);
+        }
+//        loadReport(parameters);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public boolean consultSign(String sign) {
 
@@ -479,14 +571,51 @@ public class SalariedRegister extends javax.swing.JFrame {
     }
 
     private void showAllSalarieds() {
+
+        park = ParkingRegister.returnObject();
+
         try {
-            ResultSet resp = (ResultSet) returnAllSalariedCtr();
+            ResultSet resp = (ResultSet) returnAllSalariedCtr(park.getCod());
             LtpUtil.loadFormatJTable(jScrollPane1, resp);
         } catch (SQLException | LtpUtilException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
 
+//    private void showReport(HashMap<String, Object> parameters) {
+//
+//        try {
+//
+//            LtpUtil.gerarRelatorio(
+//                    LtpUtil.RELATORIO_VISUALIZADOR_JASPER,
+//                    objCon,
+//                    parameters,
+//                    getClass().getResource("/Report/RelatorioMensalistaAtivo.jasper").openStream(),
+//                    "Relatorio de mensalistas ativos");
+//
+//        } catch (Exception e) {
+//            Logger.getLogger(ControllerPayment.class.getName()).log(Level.SEVERE, null, e);
+//        }
+//
+//    }
+//
+//    private void loadReport(final HashMap<String, Object> parameters) {
+//
+//        al = new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if (jProgressBar1.getValue() < 100) {
+//                    jProgressBar1.setValue(jProgressBar1.getValue() + 5);
+//                } else {
+//                    t.stop();
+//                    showReport(parameters);
+//                }
+//            }
+//        };
+//        t = new Timer(250, al);
+//        initComponents();
+//        t.start();
+//    }
     public static Salaried returnObject() {
         return sal;
     }
@@ -536,9 +665,11 @@ public class SalariedRegister extends javax.swing.JFrame {
     private javax.swing.JButton jBtnEdit;
     private javax.swing.JButton jBtnOpenPark3;
     private javax.swing.JButton jBtnRegister2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonClear;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -551,6 +682,7 @@ public class SalariedRegister extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTableSalaried;
     private javax.swing.JTextField jTextFieldCodePark;
     private javax.swing.JTextField jTextFieldCodeSalaried;

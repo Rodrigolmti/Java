@@ -1,12 +1,12 @@
 package view;
 
-import static Controller.ControllPark.consultCnpjCtr;
 import static Controller.ControllPark.deleteParkingCtr;
 import static Controller.ControllPark.editParkingCtr;
 import static Controller.ControllPark.insertParkingCtr;
-import static Controller.ControllPark.parkReturnObjectCtr;
-import static Controller.ControllPark.searchAllParkingCtr;
-import static Controller.ControllPark.searchParkCodeCtr;
+import static Controller.ControllPark.parkReturnWithCodeObjectCtr;
+import static Controller.ControllPark.returnAllParkingsCtr;
+import static Controller.ControllPark.searchWithCnpjParkCtr;
+import static Controller.ControllPark.searchWithCodeParkCtr;
 import static Utils.Generic.verifyObject;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -32,7 +32,7 @@ public class ParkingRegister extends javax.swing.JFrame {
     /**
      * Creates new form Register
      */
-    static Parking park;
+    public static Parking park;
 
     public ParkingRegister() {
         initComponents();
@@ -91,18 +91,17 @@ public class ParkingRegister extends javax.swing.JFrame {
         jTextDate = new javax.swing.JFormattedTextField();
         jLabel35 = new javax.swing.JLabel();
         jTextCode = new javax.swing.JTextField();
-        jBtnClear2 = new javax.swing.JButton();
-        jBtnEdit2 = new javax.swing.JButton();
-        jBtnDelete2 = new javax.swing.JButton();
-        jBtnRegister2 = new javax.swing.JButton();
-        jBtnOpenPark2 = new javax.swing.JButton();
         jTextCnpj = new javax.swing.JFormattedTextField();
         jTextPricePerHour = new javax.swing.JFormattedTextField();
-        jBtnSearchParking = new javax.swing.JButton();
         jScrollPaneHome = new javax.swing.JScrollPane();
         jTableHome = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jBtnOpenPark2 = new javax.swing.JButton();
+        jBtnSearchParking = new javax.swing.JButton();
+        jBtnRegister2 = new javax.swing.JButton();
+        jBtnDelete2 = new javax.swing.JButton();
+        jBtnEdit2 = new javax.swing.JButton();
+        jBtnClear2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -199,60 +198,6 @@ public class ParkingRegister extends javax.swing.JFrame {
 
         jLabel35.setText("Codigo:");
 
-        jBtnClear2.setForeground(new java.awt.Color(0, 153, 255));
-        jBtnClear2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Eraser-24.png"))); // NOI18N
-        jBtnClear2.setText("Limpar e Refazer");
-        jBtnClear2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnClearActionPerformed(evt);
-            }
-        });
-
-        jBtnEdit2.setForeground(new java.awt.Color(153, 0, 153));
-        jBtnEdit2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Process-24.png"))); // NOI18N
-        jBtnEdit2.setText("Atualizar Registros");
-        jBtnEdit2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnEditActionPerformed(evt);
-            }
-        });
-
-        jBtnDelete2.setForeground(new java.awt.Color(153, 153, 153));
-        jBtnDelete2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Delete-24.png"))); // NOI18N
-        jBtnDelete2.setText("Excluir Estacionamento");
-        jBtnDelete2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnDeleteActionPerformed(evt);
-            }
-        });
-
-        jBtnRegister2.setForeground(new java.awt.Color(0, 153, 51));
-        jBtnRegister2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Plus-24.png"))); // NOI18N
-        jBtnRegister2.setText("Registar Estacionamento");
-        jBtnRegister2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnRegisterActionPerformed(evt);
-            }
-        });
-
-        jBtnOpenPark2.setForeground(new java.awt.Color(153, 153, 0));
-        jBtnOpenPark2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Unlock-24.png"))); // NOI18N
-        jBtnOpenPark2.setText("Abrir estacionamento");
-        jBtnOpenPark2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnOpenParkActionPerformed(evt);
-            }
-        });
-
-        jBtnSearchParking.setForeground(new java.awt.Color(0, 153, 204));
-        jBtnSearchParking.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Search-24.png"))); // NOI18N
-        jBtnSearchParking.setText("Pesquisar Estacionamento");
-        jBtnSearchParking.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnSearchParkingjBtnOpenParkActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -261,69 +206,51 @@ public class ParkingRegister extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jBtnClear2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnEdit2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnDelete2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnRegister2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel35)
-                                    .addComponent(jLabel27))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextName, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextCnpj, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextCounty, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextCode, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel30)
-                            .addComponent(jLabel26))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel35)
+                            .addComponent(jLabel27))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
-                                        .addComponent(jLabel29)
-                                        .addGap(28, 28, 28)))
-                                .addGap(6, 6, 6))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jLabel34)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(JtextAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                                .addComponent(JtextCity))
-                            .addComponent(jTextDate, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(115, 115, 115)))
+                            .addComponent(jTextName, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextCnpj, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextCounty, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextCode, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel30)
+                    .addComponent(jLabel26))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel31))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextPriceMonths, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextSlots, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextPricePerHour, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(jLabel29)
+                                .addGap(28, 28, 28)))
+                        .addGap(6, 6, 6))
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jBtnSearchParking, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnOpenPark2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(12, 12, 12))))
+                        .addComponent(jLabel34)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(JtextAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                        .addComponent(JtextCity))
+                    .addComponent(jTextDate, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(115, 115, 115)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel31))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextPriceMonths, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextSlots, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextPricePerHour, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -364,15 +291,7 @@ public class ParkingRegister extends javax.swing.JFrame {
                                 .addGap(2, 2, 2)
                                 .addComponent(jTextCounty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel30))))
-                .addGap(32, 32, 32)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBtnClear2)
-                    .addComponent(jBtnEdit2)
-                    .addComponent(jBtnDelete2)
-                    .addComponent(jBtnRegister2)
-                    .addComponent(jBtnOpenPark2)
-                    .addComponent(jBtnSearchParking))
-                .addContainerGap())
+                .addGap(76, 76, 76))
         );
 
         jScrollPaneHome.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -412,38 +331,107 @@ public class ParkingRegister extends javax.swing.JFrame {
             jTableHome.getColumnModel().getColumn(9).setResizable(false);
         }
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Estacionamentos cadastrados");
+        jBtnOpenPark2.setForeground(new java.awt.Color(153, 153, 0));
+        jBtnOpenPark2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Unlock-24.png"))); // NOI18N
+        jBtnOpenPark2.setText("Abrir estacionamento");
+        jBtnOpenPark2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnOpenParkActionPerformed(evt);
+            }
+        });
+
+        jBtnSearchParking.setForeground(new java.awt.Color(0, 153, 204));
+        jBtnSearchParking.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Search-24.png"))); // NOI18N
+        jBtnSearchParking.setText("Pesquisar Estacionamento");
+        jBtnSearchParking.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnSearchParkingjBtnOpenParkActionPerformed(evt);
+            }
+        });
+
+        jBtnRegister2.setForeground(new java.awt.Color(0, 153, 51));
+        jBtnRegister2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Plus-24.png"))); // NOI18N
+        jBtnRegister2.setText("Registar Estacionamento");
+        jBtnRegister2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnRegisterActionPerformed(evt);
+            }
+        });
+
+        jBtnDelete2.setForeground(new java.awt.Color(153, 153, 153));
+        jBtnDelete2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Delete-24.png"))); // NOI18N
+        jBtnDelete2.setText("Excluir Estacionamento");
+        jBtnDelete2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnDeleteActionPerformed(evt);
+            }
+        });
+
+        jBtnEdit2.setForeground(new java.awt.Color(153, 0, 153));
+        jBtnEdit2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Process-24.png"))); // NOI18N
+        jBtnEdit2.setText("Atualizar Registros");
+        jBtnEdit2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnEditActionPerformed(evt);
+            }
+        });
+
+        jBtnClear2.setForeground(new java.awt.Color(0, 153, 255));
+        jBtnClear2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Eraser-24.png"))); // NOI18N
+        jBtnClear2.setText("Limpar e Refazer");
+        jBtnClear2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnClearActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(552, 552, 552)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(532, 532, 532)
-                .addComponent(jLabel3)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPaneHome, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(48, 48, 48))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jBtnClear2, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnEdit2, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnDelete2, javax.swing.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnRegister2, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnSearchParking, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnOpenPark2, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPaneHome))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPaneHome, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(381, 381, 381)
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 134, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPaneHome, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBtnClear2)
+                    .addComponent(jBtnEdit2)
+                    .addComponent(jBtnDelete2)
+                    .addComponent(jBtnRegister2)
+                    .addComponent(jBtnOpenPark2)
+                    .addComponent(jBtnSearchParking))
+                .addContainerGap())
         );
 
         jMenu1.setText("File");
@@ -463,7 +451,7 @@ public class ParkingRegister extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1232, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -480,7 +468,7 @@ public class ParkingRegister extends javax.swing.JFrame {
         String codeStr = (String) jTableHome.getValueAt(row, 0);
         int code = (Integer) Integer.parseInt((String) jTableHome.getValueAt(row, 0));
 
-        park = parkReturnObjectCtr(code);
+        park = parkReturnWithCodeObjectCtr(code);
         jTextCode.setText(codeStr);
         jTextName.setText(park.getNome());
         jTextCnpj.setText(park.getCnpj());
@@ -499,7 +487,7 @@ public class ParkingRegister extends javax.swing.JFrame {
             int code = (Integer) Integer.parseInt(jTextCode.getText());
 
             try {
-                ResultSet resp = (ResultSet) searchParkCodeCtr(code);
+                ResultSet resp = (ResultSet) searchWithCodeParkCtr(code);
                 LtpUtil.loadFormatJTable(jScrollPaneHome, resp);
             } catch (SQLException | LtpUtilException e) {
                 JOptionPane.showMessageDialog(this, e.getMessage());
@@ -590,15 +578,15 @@ public class ParkingRegister extends javax.swing.JFrame {
             int code = (Integer) Integer.parseInt((String) jTableHome.getValueAt(row, 0));
 
             try {
-                park = database.ParkingSQL.parkReturnObject(code);
+                park = database.ParkingSQL.parkReturnWithCodeObject(code);
 
                 String name = jTextName.getText();
                 park.setNome(name);
                 String cnpj = jTextCnpj.getText();
 
-                cnpj = cnpj.replaceAll("\\.", "");
-                cnpj = cnpj.replaceAll("/", "");
-                cnpj = cnpj.replaceAll("-", "");
+//                cnpj = cnpj.replaceAll("\\.", "");
+//                cnpj = cnpj.replaceAll("/", "");
+//                cnpj = cnpj.replaceAll("-", "");
 
                 if (consultCnpj(cnpj)) {
 
@@ -657,7 +645,7 @@ public class ParkingRegister extends javax.swing.JFrame {
 
     private void showAllParkings() {
         try {
-            ResultSet resp = (ResultSet) searchAllParkingCtr();
+            ResultSet resp = (ResultSet) returnAllParkingsCtr();
             LtpUtil.loadFormatJTable(jScrollPaneHome, resp);
         } catch (SQLException | LtpUtilException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -666,7 +654,7 @@ public class ParkingRegister extends javax.swing.JFrame {
 
     public boolean consultCnpj(String cnpj) {
 
-        if (consultCnpjCtr(cnpj)) {
+        if (searchWithCnpjParkCtr(cnpj)) {
             JOptionPane.showMessageDialog(this, "Ja existe um estacionamento com o cnpj informado!");
             return false;
         }
@@ -735,7 +723,6 @@ public class ParkingRegister extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;

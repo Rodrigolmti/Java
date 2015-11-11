@@ -7,8 +7,6 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.firebirdsql.jdbc.FBDriver;
 
@@ -19,9 +17,6 @@ import org.firebirdsql.jdbc.FBDriver;
 public class ConnectionFactory {
 
     private static Connection objCon;
-    private static PreparedStatement objCons;
-    private static ResultSet result;
-
     /**
      * Abrir conexão com o banco de dados
      * @throws SQLException

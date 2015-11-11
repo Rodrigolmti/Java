@@ -5,12 +5,7 @@
  */
 package Utils;
 
-import static database.VehicleSQL.cosultVehicleSign;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import view.ParkingRegister;
 
 /**
  *
@@ -31,20 +26,5 @@ public class Generic {
         }
         JOptionPane.showMessageDialog(null, "Objeto não instanciado / selecione um veiculo!");
         return false;
-    }
-    
-    //Methods vehicle entrace
-    
-    public static boolean consultSign(String sign) {
-
-        try {
-            if (cosultVehicleSign(sign)) {
-                JOptionPane.showMessageDialog(null, "Ja existe um veiculo com a placa informada!");
-                return false;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ParkingRegister.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return true;
     }
 }
